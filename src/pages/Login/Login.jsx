@@ -1,6 +1,7 @@
 import { useRef } from "react"
 import Button from "../../components/Button"
 import { loginUser } from "./services/loginApi";
+import {useNavigate} from "react-router-dom"
 
 // import "../index.css"
 const Login = () => {
@@ -11,6 +12,7 @@ const Login = () => {
     const handleInputChange = (fieldName, value) => {
         userCredentials.current[fieldName] = value
     }
+    const navigate = useNavigate();
     const handleSubmitLoginForm = async() => {
         // alert("btn clicked");
         switch(true){
@@ -25,6 +27,13 @@ const Login = () => {
                 break;
             default:
                 const getResponse = await loginUser(userCredentials.current);
+                // const data = await getResponse.json();
+                // console.log(await getResponse);
+                switch(true){
+                    case getResponse.status == 200:
+                        navigate("/admin/dashboard");
+                        break;
+                }
         }
     }
   return (

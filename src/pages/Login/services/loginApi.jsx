@@ -16,14 +16,17 @@ const loginUser = async(requestedcredentials) => {
             body: JSON.stringify(requestedcredentials)
         }
         );
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
+    // if (!response.ok) {
+    //   throw new Error('Network response was not ok');
+    // }
+    // console.log("response",response)
     const data = await response.json();
-    console.log(data)
+    // console.log(data)
+    return response
     // return data;
     } catch(error){
-        console.log(error)
+        // console.log(error);
+        throw error;
     }
 }
 
