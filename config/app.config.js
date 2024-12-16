@@ -1,4 +1,6 @@
-const Service_url = `http://localhost:9000/`;
-// const Service_url = `https://ser.charitytools.org/api/`;
+// const Service_url = `http://localhost:9000/`;
+const Service_url = `https://first-crud-project-backend.onrender.com/`;
 
-export {Service_url}
+const urlEnd = `admin/`
+
+export {Service_url , urlEnd}
