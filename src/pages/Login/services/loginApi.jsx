@@ -20,7 +20,7 @@ const loginUser = async(requestedcredentials) => {
     //   throw new Error('Network response was not ok');
     // }
     // console.log("response",response)
-    const data = await response.json();
+    // const data = await response.json();
     // console.log(data)
     return response
     // return data;

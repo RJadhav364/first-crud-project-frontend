@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 const navigation = [
   { name: 'Dashboard', href: '/admin/dashboard', current: true },
   { name: 'SubAdmin List', href: '/admin/sub-admin', current: false },
-  { name: 'Users List', href: '#', current: false },
+  { name: 'Users List', href: '/admin/users', current: false },
   // { name: 'Calendar', href: '#', current: false },
 ]
 
@@ -111,10 +111,10 @@ export default function Example() {
       <div className="sm:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
           {navigation.map((item) => (
-            <a
+            <Link
               key={item.name}
               as="a"
-              href={item.href}
+              to={item.href}
               aria-current={item.current ? 'page' : undefined}
               className={classNames(
                 item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
@@ -122,7 +122,7 @@ export default function Example() {
               )}
             >
               {item.name}
-            </a>
+            </Link>
           ))}
         </div>
       </div>

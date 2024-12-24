@@ -1,8 +1,8 @@
-import { Service_url, urlEnd } from "../../../../../config/app.config";
+import { Service_url, urlEndForUser } from "../../../../../config/app.config";
 
-const getSubAdminsList = async({token}) => {
+const getUserList = async({token}) => {
     try{
-        const response = await fetch(`${Service_url}${urlEnd}admin-users`,{
+        const response = await fetch(`${Service_url}${urlEndForUser}get-role-users`,{
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
@@ -17,4 +17,4 @@ const getSubAdminsList = async({token}) => {
     }
 }
 
-export {getSubAdminsList}
+export {getUserList}

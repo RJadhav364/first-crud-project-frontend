@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { getSubAdminsList } from './services/SubadminApicalls'
 import ConfirmationBox from '../../../components/ConfirmationBox';
+import useAuthStore from '../../../store/AuthStore';
 
 const SubAdminList = () => {
     const fetchsubadminList = useRef(false); //to control api call of subadmins list
@@ -9,9 +10,10 @@ const SubAdminList = () => {
     const [isDropDownopen , setIsDropDownopen] = useState(false);
     const modalBody = useRef("");
     const userEdit = useRef("");
+    const {token} = useAuthStore();
     const isDropDownRef = useRef();
     const allSubAdminList = async() => {
-        const result = await getSubAdminsList();
+        const result = await getSubAdminsList({token});
         const data = await result.json();
         // console.log(await result.json());
         setSubAdminsData(data.data)
@@ -28,7 +30,7 @@ const SubAdminList = () => {
     }
 
     const handleCheckboxChange = (id,hasAllRights) => {
-        console.log(id);
+        // console.log(id);
         switch(true){
             case hasAllRights == "yes":
                 modalBody.current = "Are you sure you want to remove rights";

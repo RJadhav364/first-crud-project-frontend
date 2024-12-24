@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Button from './Button'
 
-const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnText,onClose,userEdit,handleConfirmButtonFn}) => {
+const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnText,onClose,userEdit,handleConfirmButtonFn,outsideClickAllowed}) => {
     const [modalClass, setModalClass] = useState('opacity-0 scale-90 pointer-events-none');
     useEffect(() => {
         if (isOpen) {
@@ -25,7 +25,9 @@ const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnTex
             <>
       <div
         className="z-[102] fixed inset-0 bg-black/10 backdrop-blur-[1px] "
-        onClick={onClose}
+        // onClick={outsideClickAllowed == true && onClose}
+        onClick={outsideClickAllowed && typeof onClose === 'function' ? onClose : undefined}
+
       ></div>
       <div
         className={`z-[102] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-auto flex flex-col gap-4 p-0 bg-[#212529] rounded-lg shadow-lg  overflow-auto w-[500px] border-[1px] border-solid border-[#ffffff26] transition-all duration-700 ease-in-out ${modalClass}`}
@@ -59,7 +61,7 @@ const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnTex
             >
               {cancelBtnText}
             </button> */}
-            <Button classes={`flex h-10 items-center justify-center gap-2 px-4 py-2  text-white bg-[#5c636a] border-none rounded-md hover:bg-black/5% dark:hover:bg-white/5% focus:outline-none `} btn_title={cancelBtnText} onclickFn={onClose} />
+                <Button classes={`flex h-10 items-center justify-center gap-2 px-4 py-2  text-white bg-[#5c636a] border-none rounded-md hover:bg-black/5% dark:hover:bg-white/5% focus:outline-none `} btn_title={cancelBtnText} onclickFn={onClose} />
             <Button classes={`flex h-10 items-center justify-center gap-2 px-4 py-2 bg-[#0d6efd] text-white border-none rounded-md shadow-md ring-1 hover:ring-black/33% active:shadow-[inset_0_0_0_1px_rgb(0_0_0/13%),inset_0_2px_0_rgb(0_0_0/13%)] focus:outline-none focus:ring-2`} btn_title={confirmBtnText} onclickFn={handleConfirmButton} />
             {/* <button
               id="actionButton"

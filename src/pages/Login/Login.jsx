@@ -1,10 +1,14 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import Button from "../../components/Button"
 import { loginUser } from "./services/loginApi";
 import {useNavigate} from "react-router-dom"
+import useAuthStore from "../../store/AuthStore";
+import ConfirmationBox from "../../components/ConfirmationBox";
 
 // import "../index.css"
 const Login = () => {
+    const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
+    const modalBody = useRef("");
     const userCredentials = useRef({
         email: "",
         password: ""
@@ -12,6 +16,7 @@ const Login = () => {
     const handleInputChange = (fieldName, value) => {
         userCredentials.current[fieldName] = value
     }
+    const authStore = useAuthStore();
     const navigate = useNavigate();
     const handleSubmitLoginForm = async() => {
         // alert("btn clicked");
@@ -27,17 +32,40 @@ const Login = () => {
                 break;
             default:
                 const getResponse = await loginUser(userCredentials.current);
-                // const data = await getResponse.json();
-                // console.log(await getResponse);
+                const data = await getResponse.json();
+                // console.log(data.data);
                 switch(true){
                     case getResponse.status == 200:
+                        authStore.setAuth({
+                            isAuthenticated: true,
+                            // token: resp.data.accessToken,
+                            firstname: data.data.firstname,
+                            email: data.data.email,
+                            role: data.data.role,
+                            user_id: data.data.id,
+                            hasAllRights: data.data.hasAllRights,
+                            token: data.data.token,
+                          });
+              
                         navigate("/admin/dashboard");
                         break;
+                    case getResponse.status == 404:
+                        setIsConfirmationModelOpen(true);
+                        modalBody.current = "EmailId not found";
+                        break;
+                    case getResponse.status == 401:
+                        setIsConfirmationModelOpen(true);
+                        modalBody.current = "Password not match";
+                        break;
+                    default:
+                        setIsConfirmationModelOpen(true);
+                        modalBody.current = "Something went wrong";
                 }
         }
     }
   return (
     // <!-- component -->
+    <>
      <div className="bg-black text-white flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0">
         <a href="#">
             <div className="text-foreground font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
@@ -110,6 +138,16 @@ const Login = () => {
             </div>
         </div>
     </div> 
+    <ConfirmationBox 
+    isOpen={isConfirmationModelOpen}
+    confirmBtnText="Ok"
+    cancelBtnText="Close"
+    confirmationMessage={modalBody.current}
+    outsideClickAllowed={false}
+    onClose={() => setIsConfirmationModelOpen(false)}
+    handleConfirmButtonFn={() => setIsConfirmationModelOpen(false)}
+    />
+    </>
 //   <div className='h1 text-lg'>Login page</div>  
   )
 }
