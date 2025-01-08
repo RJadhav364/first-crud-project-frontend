@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Button from "../../components/Button"
 import { loginUser } from "./services/loginApi";
 import {useNavigate} from "react-router-dom"
@@ -18,6 +18,11 @@ const Login = () => {
     }
     const authStore = useAuthStore();
     const navigate = useNavigate();
+    useEffect(() => {
+        if (authStore.isAuthenticated) {
+            navigate('/admin/dashboard');
+        }
+    }, [authStore])
     const handleSubmitLoginForm = async() => {
         // alert("btn clicked");
         switch(true){
@@ -45,8 +50,7 @@ const Login = () => {
                             user_id: data.data.id,
                             hasAllRights: data.data.hasAllRights,
                             token: data.data.token,
-                          });
-              
+                        });
                         navigate("/admin/dashboard");
                         break;
                     case getResponse.status == 404:
