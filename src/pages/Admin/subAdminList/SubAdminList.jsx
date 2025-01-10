@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { getSingleSubadmin, getSubAdminsList } from './services/SubadminApicalls'
+import { deleteAuthorizedPerson, getSingleSubadmin, getSubAdminsList } from './services/SubadminApicalls'
 import ConfirmationBox from '../../../components/ConfirmationBox';
 import useAuthStore from '../../../store/AuthStore';
 import Button from '../../../components/Button';
@@ -16,11 +16,8 @@ const SubAdminList = () => {
     const [isUpdateModel,setIsUpdateModel] = useState(false);
     const modalBody = useRef("");
     const adminfetchData = useRef(null);
-    const userEdit = useRef({
-        actionId: "",
-        actionText: ""
-    });
-    const passedFunction = useRef(null);
+    const userEdit = useRef("");
+    const storedSubadminId = useRef("");
     const {token} = useAuthStore();
     const allSubAdminList = async(pageNumber) => {
         const result = await getSubAdminsList({token,current_page:pageNumber});
@@ -36,18 +33,28 @@ const SubAdminList = () => {
         }
     }
 
-    // const handleConfirmButtonClick = () => {
-    //     switch(true){
-    //         case userEdit.current == "provideAllRights":
-    //             alert("confirm button click")
-    //             break;
-    //         case userEdit.current == "deleteSubadmin":
-    //             alert("Record deleted")
-    //             break;
-    //         default:
-    //             alert("Remove all rights")
-    //     }
-    // }
+    const handleConfirmButtonClick = async() => {
+        switch(true){
+            case userEdit.current == "provideAllRights":
+                alert("confirm button click")
+                break;
+            case userEdit.current == "deleteSubadmin":
+                // alert("Record deleted")
+                const deletedApiCall = await deleteAuthorizedPerson({token, id:storedSubadminId.current});
+                switch(true){
+                    case deletedApiCall.status == 200:
+                        setIsConfirmationModelOpen(false);
+                        allSubAdminList(1);
+                        break;
+                    case deletedApiCall.status == 401:
+                        setIsReloginModelOpen(true);
+                        break;
+                }
+                break;
+            default:
+                alert("Remove all rights")
+        }
+    }
 
     const handleCheckboxChange = (id,hasAllRights) => {
         // console.log(id);
@@ -73,10 +80,9 @@ const SubAdminList = () => {
         switch(true){
             case actionTaken == "DeleteAction":
                 modalBody.current = "Are you sure you want to delete this subadmin";
-                userEdit.current.actionText  = "deleteSubadmin"
-                userEdit.current.actionId  = id
+                userEdit.current  = "deleteSubadmin"
+                storedSubadminId.current = id;
                 setIsConfirmationModelOpen(true);
-                passedFunction.current = allSubAdminList
                 break;
             case actionTaken == "EditAction":
                 const result = await getSingleSubadmin({token,id});
@@ -323,7 +329,7 @@ const SubAdminList = () => {
             confirmBtnText="Yes"
             cancelBtnText="Close"
             userEdit={userEdit.current}
-            handleConfirmButtonFn={passedFunction.current}
+            handleConfirmButtonFn={handleConfirmButtonClick}
             onClose={() => setIsConfirmationModelOpen(false)}
         />
         <Relogin 

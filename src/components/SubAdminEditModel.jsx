@@ -12,6 +12,9 @@ const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallLi
         mnumber: ""
     });
     const modalBody = useRef("");
+    const modelTitleCon = useRef("")
+    const userEdit = useRef("");
+    const storeEditedValues = useRef({});
     const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
     const handleUpdatePerson = async() => {
         const emailregx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
@@ -41,20 +44,45 @@ const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallLi
                 // console.log(editedValues)  
                 switch(true){
                     case Object.keys(editedValues).length == 0:
-                        
-                }         
-                const createAuthorizedPerson = await updateAuthorizedPerson({body:editedValues,token:token,id:userEditData.id});
-                const data = await createAuthorizedPerson.json();
-                switch(true){
-                    case createAuthorizedPerson.status == 200:
-                        onClosed();
-                        handleRecallListing();
-                        break;
-                    case createAuthorizedPerson.status == 409:
-                        modalBody.current = "Email ID Already exist";
-                        // userEdit.current  = "deleteSubadmin"
+                        modalBody.current = "Not made any changes";
+                        userEdit.current  = "notMadeAnyChanges"
+                        modelTitleCon.current = "Oops..."
                         setIsConfirmationModelOpen(true);
-                }
+                        break;
+                    default:
+                        modalBody.current = "Are you sure you want to update this record";
+                        userEdit.current = "updateSubAdmin"
+                        modelTitleCon.current = "Confirmation";
+                        storeEditedValues.current = editedValues
+                        setIsConfirmationModelOpen(true);
+                        // const createAuthorizedPerson = await updateAuthorizedPerson({body:editedValues,token:token,id:userEditData.id});
+                        // const data = await createAuthorizedPerson.json();
+                        // switch(true){
+                        //     case createAuthorizedPerson.status == 200:
+                        //         onClosed();
+                        //         handleRecallListing();
+                        //         break;
+                        //     case createAuthorizedPerson.status == 409:
+                        //         modalBody.current = "Email ID Already exist";
+                        //         // userEdit.current  = "deleteSubadmin"
+                        //         setIsConfirmationModelOpen(true);
+                        // }
+                }         
+        }
+    }
+    const handleFinalAction = async() =>{
+        const modifyAuthorizedPerson = await updateAuthorizedPerson({body:storeEditedValues.current,token:token,id:userEditData.id});
+        const data = await modifyAuthorizedPerson.json();
+        switch(true){
+            case modifyAuthorizedPerson.status == 200:
+                setIsConfirmationModelOpen(false);
+                onClosed();
+                handleRecallListing();
+                break;
+            case modifyAuthorizedPerson.status == 409:
+                modalBody.current = "Email ID Already exist";
+                // userEdit.current  = "deleteSubadmin"
+                setIsConfirmationModelOpen(true);
         }
     }
   return (
@@ -155,7 +183,7 @@ const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallLi
                 </div>
             </div>
                   <div className="flex gap-2 p-[1rem] justify-end">
-                        <Button classes={`font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2`} btn_title={"Create"} onclickFn={handleUpdatePerson} />
+                        <Button classes={`font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2`} btn_title={"Update"} onclickFn={handleUpdatePerson} />
                   </div>
                 </div>
             </div>
@@ -164,8 +192,10 @@ const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallLi
             isOpen={isConfirmationModelOpen}
             confirmationMessage={modalBody.current}
             confirmBtnText="OK"
-            modal_title="Oops..."
-            handleConfirmButtonFn={() => setIsConfirmationModelOpen(false)}
+            userEdit={userEdit.current}
+            modal_title={modelTitleCon.current}
+            handleConfirmButtonFn={handleFinalAction}
+            onClose={() => setIsConfirmationModelOpen(false)}
         />
     </>
   )

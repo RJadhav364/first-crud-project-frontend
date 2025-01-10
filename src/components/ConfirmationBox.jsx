@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Button from './Button'
-import { deleteAuthorizedPerson } from '../pages/Admin/subAdminList/services/SubadminApicalls';
+import { deleteAuthorizedPerson, updateAuthorizedPerson } from '../pages/Admin/subAdminList/services/SubadminApicalls';
 import useAuthStore from '../store/AuthStore';
 
 const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnText,onClose,userEdit,handleConfirmButtonFn,outsideClickAllowed,modal_title,}) => {
@@ -16,15 +16,22 @@ const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnTex
       }, [isOpen]);
       const handleConfirmButton = async() => {
         switch(true){
-            case userEdit.actionText == "deleteSubadmin":
+            case userEdit == "deleteSubadmin":
                 // handleDefineRights();
                 // console.log("confirm button click",userEdit.actionId)
-                const deletedApiCall = await deleteAuthorizedPerson({token, id:userEdit.actionId});
-                const result = await deletedApiCall.json();
-                console.log(result);
-                onClose();
+                // const deletedApiCall = await deleteAuthorizedPerson({token, id:userEdit.actionId});
+                // const result = await deletedApiCall.json();
+                // console.log(result);
+                // onClose();
                 handleConfirmButtonFn()
                 break;
+            case userEdit == "updateSubAdmin":
+                // handleDefineRights();
+                // alert("confirm button click");
+                handleConfirmButtonFn()
+                break;
+              default:
+                onClose();
         }
         // handleConfirmButtonFn();
       }
