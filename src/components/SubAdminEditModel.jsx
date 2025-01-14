@@ -4,7 +4,7 @@ import { createNewAuthorizedPerson, getSingleSubadmin, updateAuthorizedPerson } 
 import ConfirmationBox from './ConfirmationBox';
 
 const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallListing,userEditData}) => {
-    // console.log(userEditData && userEditData.role.charAt(0).toUpperCase() + userEditData && userEditData.role.slice(1).toLowerCase())
+    // console.log(userEditData)
     const createPersonData = useRef({
         firstname: "",
         email: "",

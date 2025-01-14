@@ -46,7 +46,7 @@ const Login = () => {
                             // token: resp.data.accessToken,
                             firstname: data.data.firstname,
                             email: data.data.email,
-                            role: data.data.role,
+                            storedrole: data.data.role,
                             user_id: data.data.id,
                             hasAllRights: data.data.hasAllRights,
                             token: data.data.token,

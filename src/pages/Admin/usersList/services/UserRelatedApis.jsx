@@ -37,4 +37,22 @@ const createNewUser = async({body,token}) => {
     }
 }
 
-export {getUserList,createNewUser}
+// handle partcular user fetch data
+const getPartcularUser = async({id,token}) => {
+    try{
+        const response = await fetch(`${Service_url}${urlEndForUser}get-role-users/${id}`,{
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+        })
+        // const result  = await response.json();
+        // console.log(result);
+        return response
+    } catch(err){
+        console.log(err);
+    }
+}
+
+export {getUserList,createNewUser,getPartcularUser}

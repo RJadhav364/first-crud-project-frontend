@@ -8,7 +8,7 @@ const useAuthStore = create(
       token: null,
       firstname: null,
       email: null,
-      role: null,
+      storedrole: null,
       user_id: null,
       hasAllRights: null,
       setAuth: (newState) => set((state) => newState),

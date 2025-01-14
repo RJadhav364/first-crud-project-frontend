@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 
 const navigation = [
-  { name: 'Dashboard', href: '/admin/dashboard', current: true },
+  { name: 'Dashboard', href: '/admin/dashboard', current: false },
   { name: 'SubAdmin List', href: '/admin/sub-admin', current: false },
   { name: 'Users List', href: '/admin/users', current: false },
   // { name: 'Calendar', href: '#', current: false },
@@ -13,7 +13,7 @@ function classNames(...classes) {
 
 export default function Example() {
   return (
-    <div as="nav" className="bg-gray-800">
+    <div className="bg-gray-800">
       <div className="mx-auto max-w-full px-2 sm:px-6 lg:px-8">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
