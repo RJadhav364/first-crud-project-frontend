@@ -59,7 +59,7 @@ const createNewAuthorizedPerson = async({body,token}) => {
 
 // handle update subadmin
 const updateAuthorizedPerson = async({body,token,id}) => {
-    // console.log(body,token);
+    console.log(body,token,id);
     
     try{
         const response = await fetch(`${Service_url}${urlEnd}admin-edit/${id}`,{

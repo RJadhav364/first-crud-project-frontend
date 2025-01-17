@@ -15,24 +15,24 @@ const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnTex
         }
       }, [isOpen]);
       const handleConfirmButton = async() => {
-        switch(true){
-            case userEdit == "deleteSubadmin":
-                // handleDefineRights();
-                // console.log("confirm button click",userEdit.actionId)
-                // const deletedApiCall = await deleteAuthorizedPerson({token, id:userEdit.actionId});
-                // const result = await deletedApiCall.json();
-                // console.log(result);
-                // onClose();
+        // switch(true){
+            // case userEdit == "deleteSubadmin":
+            //     // handleDefineRights();
+            //     // console.log("confirm button click",userEdit.actionId)
+            //     // const deletedApiCall = await deleteAuthorizedPerson({token, id:userEdit.actionId});
+            //     // const result = await deletedApiCall.json();
+            //     // console.log(result);
+            //     // onClose();
+            //     handleConfirmButtonFn()
+            //     break;
+            // case userEdit == "updateSubAdmin":
+            //     // handleDefineRights();
+            //     // alert("confirm button click");
                 handleConfirmButtonFn()
-                break;
-            case userEdit == "updateSubAdmin":
-                // handleDefineRights();
-                // alert("confirm button click");
-                handleConfirmButtonFn()
-                break;
-              default:
-                onClose();
-        }
+              //   break;
+              // default:
+              //   onClose();
+        // }
         // handleConfirmButtonFn();
       }
   return (

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { deleteAuthorizedPerson, getSingleSubadmin, getSubAdminsList } from './services/SubadminApicalls'
+import { deleteAuthorizedPerson, getSingleSubadmin, getSubAdminsList, updateAuthorizedPerson } from './services/SubadminApicalls'
 import ConfirmationBox from '../../../components/ConfirmationBox';
 import useAuthStore from '../../../store/AuthStore';
 import Button from '../../../components/Button';
@@ -34,9 +34,23 @@ const SubAdminList = () => {
     }
 
     const handleConfirmButtonClick = async() => {
+        let passObject;
+        let modifyAuthorizedPerson;
         switch(true){
             case userEdit.current == "provideAllRights":
-                alert("confirm button click")
+                // alert("confirm button click")
+                passObject = {hasAllRights : "Yes"}
+                modifyAuthorizedPerson = await updateAuthorizedPerson({body:passObject,token:token,id:storedSubadminId.current});
+                switch(true){
+                    case modifyAuthorizedPerson.status == 200:
+                        setIsConfirmationModelOpen(false);
+                        allSubAdminList(1);
+                        break;
+                    case modifyAuthorizedPerson.status == 409:
+                        modalBody.current = "Email ID Already exist";
+                        // userEdit.current  = "deleteSubadmin"
+                        setIsConfirmationModelOpen(true);
+                }
                 break;
             case userEdit.current == "deleteSubadmin":
                 // alert("Record deleted")
@@ -52,21 +66,34 @@ const SubAdminList = () => {
                 }
                 break;
             default:
-                alert("Remove all rights")
+                passObject = {hasAllRights : "No"}
+                modifyAuthorizedPerson = await updateAuthorizedPerson({body:passObject,token:token,id:storedSubadminId.current});
+                switch(true){
+                    case modifyAuthorizedPerson.status == 200:
+                        setIsConfirmationModelOpen(false);
+                        allSubAdminList(1);
+                        break;
+                    case modifyAuthorizedPerson.status == 409:
+                        modalBody.current = "Email ID Already exist";
+                        // userEdit.current  = "deleteSubadmin"
+                        setIsConfirmationModelOpen(true);
+                }
         }
     }
 
     const handleCheckboxChange = (id,hasAllRights) => {
-        // console.log(id);
+        // console.log(id,hasAllRights);
         switch(true){
-            case hasAllRights == "yes":
+            case hasAllRights == "Yes":
                 modalBody.current = "Are you sure you want to remove rights";
                 userEdit.current  = "removeRights"
+                storedSubadminId.current = id;
                 setIsConfirmationModelOpen(true);
                 break;
             default: 
                 modalBody.current = "Are you sure you want to provide all rights";
                 userEdit.current  = "provideAllRights"
+                storedSubadminId.current = id;
                 setIsConfirmationModelOpen(true);
                 break;
         }
@@ -155,7 +182,7 @@ const SubAdminList = () => {
                                     {
                                         role == "subadmin" && storedrole == "admin"  && (
                                             <input
-                                                checked={hasAllRights == "yes"}
+                                                checked={hasAllRights == "Yes"}
                                                 type="checkbox"
                                                 name=""
                                                 id=""

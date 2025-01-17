@@ -6,11 +6,11 @@ const useAuthStore = create(
     (set) => ({
       isAuthenticated: false,
       token: null,
-      firstname: null,
-      email: null,
+      storedfirstname: null,
+      storedemail: null,
       storedrole: null,
-      user_id: null,
-      hasAllRights: null,
+      storeduser_id: null,
+      storedhasAllRights: null,
       setAuth: (newState) => set((state) => newState),
     }),
     {

@@ -44,11 +44,11 @@ const Login = () => {
                         authStore.setAuth({
                             isAuthenticated: true,
                             // token: resp.data.accessToken,
-                            firstname: data.data.firstname,
-                            email: data.data.email,
+                            storedfirstname: data.data.firstname,
+                            storedemail: data.data.email,
                             storedrole: data.data.role,
-                            user_id: data.data.id,
-                            hasAllRights: data.data.hasAllRights,
+                            storeduser_id: data.data.id,
+                            storedhasAllRights: data.data.hasAllRights,
                             token: data.data.token,
                         });
                         navigate("/admin/dashboard");

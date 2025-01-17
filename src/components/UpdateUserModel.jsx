@@ -1,27 +1,30 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import ConfirmationBox from './ConfirmationBox'
 import Button from './Button'
 import useAuthStore from '../store/AuthStore'
 import { emailregx } from '../validation/InputValidation'
-import { createNewUser } from '../pages/Admin/usersList/services/UserRelatedApis'
+import { updateUser } from '../pages/Admin/usersList/services/UserRelatedApis'
 
-const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList,fetchSingleUserData}) => {
-    const {token} = useAuthStore();
+const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList,fetchSingleUserData,passedListingFunction}) => {
+    // console.log(fetchSingleUserData?.data?.adminDetails?.firstname)
+    const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
+    const modalBody = useRef("");
+    const userEdit = useRef("");
+    const storeEditedValues = useRef({});
+    const {token,storedrole} = useAuthStore();
     const createPersonData = useRef({
         firstname: "",
         lastname: "",
         email: "",
         role: "",
-        password: "",
         number: "",
         handledSubAdmin: ""
     });
-    console.log(fetchSingleUserData.data)
-    const handleCreateUser = async() => {
-        console.log(createPersonData.current.firstname.value)
+    const handleUpdateUser = async() => {
+        console.log(fetchSingleUserData.data.adminDetails)
         let formValues = {};
         switch(true){
-            case createPersonData.current.firstname.value == "" || createPersonData.current.lastname.value == "" || createPersonData.current.email.value == "" || createPersonData.current.role.value == "" || createPersonData.current.password.value == ""|| createPersonData.current.number.value == "" || createPersonData.current.handledSubAdmin.value == "":
+            case createPersonData.current.firstname.value == "" || createPersonData.current.lastname.value == "" || createPersonData.current.email.value == "" || createPersonData.current.role.value == "" || createPersonData.current.number.value == "" || createPersonData.current.handledSubAdmin.value == "":
                 alert("All fields are required");
                 break;
             case !emailregx.test(createPersonData.current.email.value):
@@ -29,11 +32,43 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                 break;
             default:
                 for(let key in createPersonData.current){
-                    console.log(key)
-                    // createPersonData.current[key] = createPersonData.current[key].value
                     formValues[key] = createPersonData.current[key].value;
                 }
-                const getCreatedUserResult = await createNewUser({body: formValues, token: token});
+                const editedFields = Object.keys(formValues).filter(
+                    (key) => formValues[key] !== fetchSingleUserData.data[key]);
+                const editedValues = {};
+                editedFields.forEach((field) => {
+                  editedValues[field] = formValues[field];
+                });
+                switch(true){
+                    case Object.keys(editedValues).length == 0:
+                        // alert("Not made any changes");
+                        // setIsConfirmationModelOpen(true);
+                        modalBody.current = "Not made any changes";
+                        userEdit.current  = "notMadeAnyChanges"
+                        break;
+                    default:
+                        setIsConfirmationModelOpen(true);
+                        modalBody.current = "Are you sure you want to update record";
+                        storeEditedValues.current = editedValues;
+                        break;
+                }
+        }
+    }
+    const handleFinalAction = async() => {
+        const getUpdatedUserResult = await updateUser({body: storeEditedValues.current, token: token,id:fetchSingleUserData.data.id,hasAllRights:fetchSingleUserData.data.adminDetails.hasAllRights});
+        setIsConfirmationModelOpen(false);
+        // console.log(getUpdatedUserResult)
+        if(getUpdatedUserResult.status == 200){
+            setIsConfirmationModelOpen(false);
+            onClosed();
+            passedListingFunction();
+        } else if(getUpdatedUserResult.status == 409){
+            modalBody.current = "Email ID Already exist";
+            setIsConfirmationModelOpen(true);
+        } else if(getUpdatedUserResult.status == 403){
+            modalBody.current = "You're not authorized to perform this action";
+            setIsConfirmationModelOpen(true);
         }
     }
   return (
@@ -114,11 +149,12 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                                             // onChange={(e)=>{createPersonData.current.firstname = e}}
                                             // ref={(e)=>{createPersonData.current.firstname = e}}
                                             className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" /> */}
-                                        <select name="handledSubAdmin" defaultValue={fetchSingleUserData?.data?.handledSubAdmin} id="handledSubAdmin" className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground mt-[7px]" ref={(e)=>{createPersonData.current.handledSubAdmin = e}}>
-                                        <option value="" selected disabled>Select Authorized Person</option>
+                                        <select name="handledSubAdmin" 
+                                         id="handledSubAdmin" className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground mt-[7px]" ref={(e)=>{createPersonData.current.handledSubAdmin = e}}>
+                                        {/* <option value="" selected disabled>{fetchSingleUserData?.data?.adminDetails?.firstname}</option> */}
                                         {
                                             passAuthorizedList && passAuthorizedList.length > 0 && passAuthorizedList.map(({_id,firstname})=>(
-                                                <option className='text-black' key={_id} value={_id}>{firstname}</option>
+                                                <option selected={fetchSingleUserData?.data?.adminDetails?.firstname == firstname} className='text-black' key={_id} value={_id}>{firstname}</option>
                                             ))
                                         }
                                         </select>
@@ -188,20 +224,21 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                 </div>
             </div>
                   <div className="flex gap-2 p-[1rem] justify-end">
-                        <Button classes={`font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2`} btn_title={"Create"} 
-                        onclickFn={handleCreateUser} 
+                        <Button classes={`font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2`} btn_title={"Update"} 
+                        onclickFn={handleUpdateUser} 
                         />
                   </div>
                 </div>
             </div>
         </>
-        {/* <ConfirmationBox 
+        <ConfirmationBox 
             isOpen={isConfirmationModelOpen}
             confirmationMessage={modalBody.current}
             confirmBtnText="OK"
-            modal_title="Oops..."
-            handleConfirmButtonFn={() => setIsConfirmationModelOpen(false)}
-        /> */}
+            modal_title="Confirmation"
+            onClose={() => setIsConfirmationModelOpen(false)}
+            handleConfirmButtonFn={handleFinalAction}
+        />
     </>
   )
 }

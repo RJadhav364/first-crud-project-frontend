@@ -1,12 +1,14 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import ConfirmationBox from './ConfirmationBox'
 import Button from './Button'
 import useAuthStore from '../store/AuthStore'
 import { emailregx } from '../validation/InputValidation'
 import { createNewUser } from '../pages/Admin/usersList/services/UserRelatedApis'
 
-const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList}) => {
-    const {token} = useAuthStore();
+const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList,passedListingFunction}) => {
+    const {token,storedrole,storedfirstname,storeduser_id} = useAuthStore();
+    const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
+    const modalBody = useRef("");
     const createPersonData = useRef({
         firstname: "",
         lastname: "",
@@ -17,7 +19,7 @@ const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
         handledSubAdmin: ""
     });
     const handleCreateUser = async() => {
-        console.log(createPersonData.current.firstname.value)
+        // console.log(createPersonData.current.firstname.value)
         let formValues = {};
         switch(true){
             case createPersonData.current.firstname.value == "" || createPersonData.current.lastname.value == "" || createPersonData.current.email.value == "" || createPersonData.current.role.value == "" || createPersonData.current.password.value == ""|| createPersonData.current.number.value == "" || createPersonData.current.handledSubAdmin.value == "":
@@ -33,12 +35,30 @@ const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                     formValues[key] = createPersonData.current[key].value;
                 }
                 const getCreatedUserResult = await createNewUser({body: formValues, token: token});
+                switch(true){
+                    case getCreatedUserResult.status == 200:
+                        for(let key in createPersonData.current){
+                            createPersonData.current[key].value = ""
+                        }
+                        onClosed();
+                        passedListingFunction();
+                        break;
+                    case getCreatedUserResult.status == 409:
+                        modalBody.current = "Email ID Already exist";
+                        setIsConfirmationModelOpen(true);
+                }
+        }
+    }
+    const handleClosedModel = () => {
+        onClosed();
+        for(let key in createPersonData.current){
+            createPersonData.current[key].value = ""
         }
     }
   return (
     <>
       <>
-            <div className={`z-[102] fixed inset-0 bg-black/10 backdrop-blur-[1px] ${isUserModelOpen ? "block" : "hidden"}`} onClick={onClosed}>
+            <div className={`z-[102] fixed inset-0 bg-black/10 backdrop-blur-[1px] ${isUserModelOpen ? "block" : "hidden"}`} onClick={handleClosedModel}>
             </div>
             <div
                 className={`z-[102] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-auto flex flex-col gap-4 p-0 bg-[#212529] rounded-lg shadow-lg  overflow-auto w-[800px] border-[1px] border-solid border-[#ffffff26] transition-all duration-700 ease-in-out ${isUserModelOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"}`}
@@ -111,14 +131,23 @@ const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                                             // onChange={(e)=>{createPersonData.current.firstname = e}}
                                             // ref={(e)=>{createPersonData.current.firstname = e}}
                                             className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" /> */}
-                                        <select name="handledSubAdmin" id="handledSubAdmin" className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground mt-[7px]" ref={(e)=>{createPersonData.current.handledSubAdmin = e}}>
-                                        <option value="" selected disabled>Select Authorized Person</option>
                                         {
-                                            passAuthorizedList && passAuthorizedList.length > 0 && passAuthorizedList.map(({_id,firstname})=>(
-                                                <option className='text-black' key={_id} value={_id}>{firstname}</option>
-                                            ))
+                                            storedrole == "subadmin" ? (
+                                                <select name="handledSubAdmin" id="handledSubAdmin" className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground mt-[7px]" ref={(e)=>{createPersonData.current.handledSubAdmin = e}}>
+                                                    <option selected disabled value={storeduser_id}>{storedfirstname}</option>
+                                                </select>
+                                            ) : (
+                                                <select name="handledSubAdmin" id="handledSubAdmin" className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground mt-[7px]" ref={(e)=>{createPersonData.current.handledSubAdmin = e}}>
+                                                <option value="" selected disabled>Select Authorized Person</option>
+                                                {
+                                                    passAuthorizedList && passAuthorizedList.length > 0 && passAuthorizedList.map(({_id,firstname})=>(
+                                                        <option className='text-black' key={_id} value={_id}>{firstname}</option>
+                                                        // disabled={storedrole == "subadmin" && firstname != storedfirstname}
+                                                    ))
+                                                }
+                                                </select>
+                                            )
                                         }
-                                        </select>
                                     </div>
                                 </div>
                             </div>
@@ -207,13 +236,13 @@ const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                 </div>
             </div>
         </>
-        {/* <ConfirmationBox 
+        <ConfirmationBox 
             isOpen={isConfirmationModelOpen}
             confirmationMessage={modalBody.current}
             confirmBtnText="OK"
             modal_title="Oops..."
             handleConfirmButtonFn={() => setIsConfirmationModelOpen(false)}
-        /> */}
+        />
     </>
   )
 }
