@@ -6,6 +6,7 @@ import Button from '../../../components/Button';
 import Relogin from '../../../components/Relogin';
 import SubAdminModel from '../../../components/SubAdminModel';
 import SubAdminEditModel from '../../../components/SubAdminEditModel';
+import { toast } from 'react-toastify';
 
 const SubAdminList = () => {
     const fetchsubadminList = useRef(false); //to control api call of subadmins list
@@ -18,6 +19,8 @@ const SubAdminList = () => {
     const adminfetchData = useRef(null);
     const userEdit = useRef("");
     const storedSubadminId = useRef("");
+    const showConfirmButton = useRef(false);
+    const showCancelButton = useRef(false);
     const {token,storedrole} = useAuthStore();
     const allSubAdminList = async(pageNumber) => {
         const result = await getSubAdminsList({token,current_page:pageNumber});
@@ -59,6 +62,10 @@ const SubAdminList = () => {
                     case deletedApiCall.status == 200:
                         setIsConfirmationModelOpen(false);
                         allSubAdminList(1);
+                        toast.success("Deleted Successfully👍!",{
+                            theme: "dark",
+                            position: "top-center"
+                        })
                         break;
                     case deletedApiCall.status == 401:
                         setIsReloginModelOpen(true);
@@ -109,6 +116,8 @@ const SubAdminList = () => {
                 modalBody.current = "Are you sure you want to delete this subadmin";
                 userEdit.current  = "deleteSubadmin"
                 storedSubadminId.current = id;
+                showConfirmButton.current = true;
+                showCancelButton.current = false;
                 setIsConfirmationModelOpen(true);
                 break;
             case actionTaken == "EditAction":
@@ -371,6 +380,8 @@ const SubAdminList = () => {
             confirmationMessage={modalBody.current}
             confirmBtnText="Yes"
             cancelBtnText="Close"
+            confirmButtonVisible={showConfirmButton.current}
+            cancelButtonVisible={showCancelButton.current}
             userEdit={userEdit.current}
             handleConfirmButtonFn={handleConfirmButtonClick}
             onClose={() => setIsConfirmationModelOpen(false)}

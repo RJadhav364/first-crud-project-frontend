@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 import { createNewAuthorizedPerson, getSingleSubadmin, updateAuthorizedPerson } from '../pages/Admin/subAdminList/services/SubadminApicalls'
 import ConfirmationBox from './ConfirmationBox';
+import { toast } from 'react-toastify';
 
 const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallListing,userEditData}) => {
     // console.log(userEditData)
@@ -16,6 +17,8 @@ const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallLi
     const userEdit = useRef("");
     const storeEditedValues = useRef({});
     const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
+    const showConfirmButton = useRef(false);
+    const showCancelButton = useRef(false);
     const handleUpdatePerson = async() => {
         const emailregx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
         switch(true){
@@ -36,7 +39,6 @@ const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallLi
                 const editedFields = Object.keys(formData).filter(
                     (key) => formData[key] !== userEditData[key]
                 );
-                console.log(editedFields)
                 const editedValues = {};
                 editedFields.forEach((field) => {
                   editedValues[field] = formData[field];
@@ -48,40 +50,39 @@ const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallLi
                         userEdit.current  = "notMadeAnyChanges"
                         modelTitleCon.current = "Oops..."
                         setIsConfirmationModelOpen(true);
+                        showConfirmButton.current = false;
+                        showCancelButton.current = true;
                         break;
                     default:
                         modalBody.current = "Are you sure you want to update this record";
                         userEdit.current = "updateSubAdmin"
                         modelTitleCon.current = "Confirmation";
-                        storeEditedValues.current = editedValues
+                        storeEditedValues.current = editedValues;
+                        showConfirmButton.current = true;
+                        showCancelButton.current = true;
                         setIsConfirmationModelOpen(true);
-                        // const createAuthorizedPerson = await updateAuthorizedPerson({body:editedValues,token:token,id:userEditData.id});
-                        // const data = await createAuthorizedPerson.json();
-                        // switch(true){
-                        //     case createAuthorizedPerson.status == 200:
-                        //         onClosed();
-                        //         handleRecallListing();
-                        //         break;
-                        //     case createAuthorizedPerson.status == 409:
-                        //         modalBody.current = "Email ID Already exist";
-                        //         // userEdit.current  = "deleteSubadmin"
-                        //         setIsConfirmationModelOpen(true);
-                        // }
                 }         
         }
     }
     const handleFinalAction = async() =>{
+        setIsConfirmationModelOpen(false);
         const modifyAuthorizedPerson = await updateAuthorizedPerson({body:storeEditedValues.current,token:token,id:userEditData.id});
         const data = await modifyAuthorizedPerson.json();
         switch(true){
             case modifyAuthorizedPerson.status == 200:
-                setIsConfirmationModelOpen(false);
+                toast.success("Subadmin Updated👍!",{
+                    theme: "dark",
+                    position: "top-center"
+                })
+                
                 onClosed();
                 handleRecallListing();
                 break;
             case modifyAuthorizedPerson.status == 409:
                 modalBody.current = "Email ID Already exist";
                 // userEdit.current  = "deleteSubadmin"
+                showConfirmButton.current = false;
+                showCancelButton.current = true;
                 setIsConfirmationModelOpen(true);
         }
     }
@@ -191,7 +192,10 @@ const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallLi
         <ConfirmationBox 
             isOpen={isConfirmationModelOpen}
             confirmationMessage={modalBody.current}
+            confirmButtonVisible={showConfirmButton.current}
+            cancelButtonVisible={showCancelButton.current}
             confirmBtnText="OK"
+            cancelBtnText="Cancel"
             userEdit={userEdit.current}
             modal_title={modelTitleCon.current}
             handleConfirmButtonFn={handleFinalAction}

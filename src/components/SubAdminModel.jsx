@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Button from './Button'
 import { createNewAuthorizedPerson } from '../pages/Admin/subAdminList/services/SubadminApicalls'
 import ConfirmationBox from './ConfirmationBox';
+import { toast } from 'react-toastify';
 
 const SubAdminModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallListing}) => {
     const createPersonData = useRef({
@@ -41,8 +42,12 @@ const SubAdminModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallListin
                         createPersonData.current.role.value = '';
                         createPersonData.current.password.value = '';
                         createPersonData.current.mnumber.value = '';
+                        toast.success("New Subadmin Created👍!",{
+                            theme: "dark",
+                            position: "top-center"
+                        })
                         onClosed();
-                        handleRecallListing();
+                        handleRecallListing(1);
                         break;
                     case createAuthorizedPerson.status == 409:
                         modalBody.current = "Email ID Already exist";
@@ -119,16 +124,15 @@ const SubAdminModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallListin
                                                 className="text-xs font-medium text-muted-foreground group-focus-within:text-white text-gray-400">Role</label>
                                         </div>
                                         <div className="flex items-center">
-                                            {/* <input type="password" name="password"
-                                            // onChange={(e)=>{handleInputChange("password",e.target.value)}}
+                                            <input type="role" name="role"
                                             placeholder="Role"
-                                                className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 focus:ring-teal-500 sm:leading-7 text-foreground" /> */}
-                                                <select name="role" id="role" 
-                                                // onChange={(e)=>{handleInputChange("role",e.target.value)}}
+                                            ref={(e)=>{createPersonData.current.role = e}}
+                                            defaultValue="subadmin"
+                                                className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 focus:ring-teal-500 sm:leading-7 text-foreground text-white" />
+                                                {/* <select name="role" id="role" 
                                                 ref={(e)=>{createPersonData.current.role = e}} className='text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 focus:ring-teal-500 sm:leading-7 text-foreground'>
-                                                    {/* <option className="text-black" value="user">User</option> */}
                                                     <option className="text-black" value="subadmin" selected disabled>SubAdmin</option>
-                                                </select>
+                                                </select> */}
                                         </div>
                                     </div>
                                 </div>

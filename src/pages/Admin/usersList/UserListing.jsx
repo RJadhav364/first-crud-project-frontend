@@ -149,7 +149,7 @@ const UserListing = () => {
                                     </span>
                               </button>
                               <button
-                                          className={`relative h-10 max-h-[20px] w-10 max-w-[20px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ${storedrole == "subadmin" ? hasAllRights == "Yes" ? "" : "cursor-not-allowed" : ""}`}
+                                          className={`relative h-10 max-h-[20px] w-10 max-w-[20px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none ${storedrole == "subadmin" ? authorizedDetails.hasAllRights == "Yes" ? "" : "cursor-not-allowed" : ""}`}
                                           type="button"
                                           // disabled={storedrole == "subadmin" ? hasAllRights == "yes" ? "" : "true" : ""}
                                           // onClick={() => {
