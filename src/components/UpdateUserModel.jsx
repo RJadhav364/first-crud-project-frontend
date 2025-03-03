@@ -12,6 +12,8 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
     const userEdit = useRef("");
     const storeEditedValues = useRef({});
     const {token,storedrole} = useAuthStore();
+    const showConfirmButton = useRef(false);
+    const showCancelButton = useRef(false);
     const createPersonData = useRef({
         firstname: "",
         lastname: "",
@@ -43,9 +45,11 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                 switch(true){
                     case Object.keys(editedValues).length == 0:
                         // alert("Not made any changes");
-                        // setIsConfirmationModelOpen(true);
+                        setIsConfirmationModelOpen(true);
                         modalBody.current = "Not made any changes";
                         userEdit.current  = "notMadeAnyChanges"
+                        showConfirmButton.current = true;
+                        showCancelButton.current = false;
                         break;
                     default:
                         setIsConfirmationModelOpen(true);
@@ -238,6 +242,8 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
             modal_title="Confirmation"
             onClose={() => setIsConfirmationModelOpen(false)}
             handleConfirmButtonFn={handleFinalAction}
+            confirmButtonVisible={showConfirmButton.current}
+            cancelButtonVisible={showCancelButton.current}
         />
     </>
   )

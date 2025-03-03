@@ -4,11 +4,14 @@ import { loginUser } from "./services/loginApi";
 import {useNavigate} from "react-router-dom"
 import useAuthStore from "../../store/AuthStore";
 import ConfirmationBox from "../../components/ConfirmationBox";
+import { toast } from "react-toastify";
 
 // import "../index.css"
 const Login = () => {
     const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
     const modalBody = useRef("");
+    const showConfirmButton = useRef(false);
+    const showCancelButton = useRef(false);
     const userCredentials = useRef({
         email: "",
         password: ""
@@ -51,18 +54,28 @@ const Login = () => {
                             storedhasAllRights: data.data.hasAllRights,
                             token: data.data.token,
                         });
+                        toast.success("Logged In!",{
+                            position: "top-center",
+                            theme: "dark"
+                        })
                         navigate("/admin/dashboard");
                         break;
                     case getResponse.status == 404:
                         setIsConfirmationModelOpen(true);
                         modalBody.current = "EmailId not found";
+                        showConfirmButton.current = true;
+                        showCancelButton.current = false;
                         break;
                     case getResponse.status == 401:
                         setIsConfirmationModelOpen(true);
                         modalBody.current = "Password not match";
+                        showConfirmButton.current = true;
+                        showCancelButton.current = false;
                         break;
                     default:
                         setIsConfirmationModelOpen(true);
+                        showConfirmButton.current = true;
+                        showCancelButton.current = false;
                         modalBody.current = "Something went wrong";
                 }
         }
@@ -148,6 +161,8 @@ const Login = () => {
     cancelBtnText="Close"
     confirmationMessage={modalBody.current}
     outsideClickAllowed={false}
+    confirmButtonVisible={showConfirmButton.current}
+    cancelButtonVisible={showCancelButton.current}
     onClose={() => setIsConfirmationModelOpen(false)}
     handleConfirmButtonFn={() => setIsConfirmationModelOpen(false)}
     />

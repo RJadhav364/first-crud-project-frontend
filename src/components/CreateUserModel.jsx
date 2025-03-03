@@ -4,11 +4,14 @@ import Button from './Button'
 import useAuthStore from '../store/AuthStore'
 import { emailregx } from '../validation/InputValidation'
 import { createNewUser } from '../pages/Admin/usersList/services/UserRelatedApis'
+import { toast } from 'react-toastify'
 
 const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList,passedListingFunction}) => {
     const {token,storedrole,storedfirstname,storeduser_id} = useAuthStore();
     const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
     const modalBody = useRef("");
+    const showConfirmButton = useRef(false);
+    const showCancelButton = useRef(false);
     const createPersonData = useRef({
         firstname: "",
         lastname: "",
@@ -30,7 +33,6 @@ const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                 break;
             default:
                 for(let key in createPersonData.current){
-                    console.log(key)
                     // createPersonData.current[key] = createPersonData.current[key].value
                     formValues[key] = createPersonData.current[key].value;
                 }
@@ -40,12 +42,25 @@ const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                         for(let key in createPersonData.current){
                             createPersonData.current[key].value = ""
                         }
+                        toast.success("New User Created!",{
+                            position: "top-center",
+                            theme: "dark"
+                        })
                         onClosed();
                         passedListingFunction();
                         break;
                     case getCreatedUserResult.status == 409:
                         modalBody.current = "Email ID Already exist";
+                        showConfirmButton.current = true;
+                        showCancelButton.current = false;
                         setIsConfirmationModelOpen(true);
+                        break;
+                    default: 
+                        modalBody.current = "Something went wrong";
+                        showConfirmButton.current = true;
+                        showCancelButton.current = false;
+                        setIsConfirmationModelOpen(true);
+                        break;
                 }
         }
     }
@@ -241,6 +256,8 @@ const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
             confirmationMessage={modalBody.current}
             confirmBtnText="OK"
             modal_title="Oops..."
+            confirmButtonVisible={showConfirmButton.current}
+            cancelButtonVisible={showCancelButton.current}
             handleConfirmButtonFn={() => setIsConfirmationModelOpen(false)}
         />
     </>
