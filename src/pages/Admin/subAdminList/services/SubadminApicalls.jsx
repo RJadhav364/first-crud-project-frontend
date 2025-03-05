@@ -5,6 +5,7 @@ const getSubAdminsList = async({token,current_page}) => {
         const response = await fetch(`${Service_url}${urlEnd}admin-users?page=${current_page}`,{
             method: "GET",
             headers: {
+                'ngrok-skip-browser-warning': 'true',
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
