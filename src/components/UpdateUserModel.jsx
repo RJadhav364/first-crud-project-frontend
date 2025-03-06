@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ConfirmationBox from './ConfirmationBox'
 import Button from './Button'
 import useAuthStore from '../store/AuthStore'
@@ -6,12 +6,12 @@ import { emailregx } from '../validation/InputValidation'
 import { updateUser } from '../pages/Admin/usersList/services/UserRelatedApis'
 
 const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList,fetchSingleUserData,passedListingFunction}) => {
-    // console.log(fetchSingleUserData?.data?.adminDetails?.firstname)
+    console.log("isUserModelOpen",isUserModelOpen)
     const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
     const modalBody = useRef("");
     const userEdit = useRef("");
     const storeEditedValues = useRef({});
-    const {token,storedrole} = useAuthStore();
+    const {token,storedrole,storedhasAllRights} = useAuthStore();
     const showConfirmButton = useRef(false);
     const showCancelButton = useRef(false);
     const createPersonData = useRef({
@@ -22,8 +22,9 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
         number: "",
         handledSubAdmin: ""
     });
+    console.log(createPersonData.current)
     const handleUpdateUser = async() => {
-        console.log(fetchSingleUserData.data.adminDetails)
+        // console.log(createPersonData.current)
         let formValues = {};
         switch(true){
             case createPersonData.current.firstname.value == "" || createPersonData.current.lastname.value == "" || createPersonData.current.email.value == "" || createPersonData.current.role.value == "" || createPersonData.current.number.value == "" || createPersonData.current.handledSubAdmin.value == "":
@@ -55,12 +56,14 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                         setIsConfirmationModelOpen(true);
                         modalBody.current = "Are you sure you want to update record";
                         storeEditedValues.current = editedValues;
+                        showConfirmButton.current = true;
+                        showCancelButton.current = false;
                         break;
                 }
         }
     }
     const handleFinalAction = async() => {
-        const getUpdatedUserResult = await updateUser({body: storeEditedValues.current, token: token,id:fetchSingleUserData.data.id,hasAllRights:fetchSingleUserData.data.adminDetails.hasAllRights});
+        const getUpdatedUserResult = await updateUser({body: storeEditedValues.current, token: token,id:fetchSingleUserData.data.id,hasAllRights:storedhasAllRights});
         setIsConfirmationModelOpen(false);
         // console.log(getUpdatedUserResult)
         if(getUpdatedUserResult.status == 200){
@@ -75,10 +78,44 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
             setIsConfirmationModelOpen(true);
         }
     }
+    const handleOnOpen = () => {
+        if (fetchSingleUserData?.data) {
+            createPersonData.current.firstname.value = fetchSingleUserData.data.firstname;
+            createPersonData.current.lastname.value = fetchSingleUserData.data.lastname;
+            createPersonData.current.email.value = fetchSingleUserData.data.email;
+            createPersonData.current.role.value = fetchSingleUserData.data.role;
+            createPersonData.current.number.value = fetchSingleUserData.data.number;
+            // createPersonData.current.handledSubAdmin.value = fetchSingleUserData.data.adminDetails?._id || '';
+        }
+    };
+    const resetFormValues = () => {
+        for (let key in createPersonData.current) {
+            if (createPersonData.current[key]) {
+                createPersonData.current[key].value = ''; // reset value to empty
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (isUserModelOpen) {
+            handleOnOpen();  // Populate form when modal opens
+        } else {
+            resetFormValues();  // Reset form when modal is closed
+        }
+    }, [isUserModelOpen]);
+
+    const handleOnClosed = () => {
+        // for(let key in createPersonData.current){
+        //     createPersonData.current[key].value = "";
+        // }
+        console.log("close click")
+        onClosed();
+        // tomorrow resolved the issue the issue is when we open user model and details get fill but when model get closed we have to removed fill details so that it will not cause issue
+    }
   return (
     <>
       <>
-            <div className={`z-[102] fixed inset-0 bg-black/10 backdrop-blur-[1px] ${isUserModelOpen ? "block" : "hidden"}`} onClick={onClosed}>
+            <div className={`z-[102] fixed inset-0 bg-black/10 backdrop-blur-[1px] ${isUserModelOpen ? "block" : "hidden"}`} onClick={() => {handleOnClosed()}}>
             </div>
             <div
                 className={`z-[102] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-auto flex flex-col gap-4 p-0 bg-[#212529] rounded-lg shadow-lg  overflow-auto w-[800px] border-[1px] border-solid border-[#ffffff26] transition-all duration-700 ease-in-out ${isUserModelOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"}`}
@@ -109,9 +146,9 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                                         </div>
                                         <input type="text" name="firstname" placeholder="Username"
                                             autoComplete="off"
-                                            // value={createPersonData.current.firstname} 
-                                            // onChange={(e)=>{createPersonData.current.firstname = e}}
                                             defaultValue={fetchSingleUserData?.data?.firstname}
+                                            // value={createPersonData.current.firstname} 
+                                            // onChange={(e)=>{createPersonData.current.firstname = e.target.value}}
                                             ref={(e)=>{createPersonData.current.firstname = e}}
                                             className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" />
                                     </div>
@@ -213,7 +250,7 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                                                 className="text-xs font-medium text-muted-foreground group-focus-within:text-white text-gray-400">Number</label>
                                         </div>
                                         <div className="flex items-center">
-                                            <input type="text" name="mnumber"
+                                            <input type="text" name="number"
                                             // onChange={(e)=>{handleInputChange("mnumber",e.target.value)}}
                                             ref={(e)=>{createPersonData.current.number = e}}
                                             defaultValue={fetchSingleUserData?.data?.number}

@@ -96,7 +96,7 @@ const UserListing = () => {
       <div className="w-full h-full text-white">
         <div className="card bg-[#27293d] m-[30px]">
           <div className="card-header pt-[15px] px-[15px] flex justify-between">
-            <h4 className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">Simple Table</h4>
+            <h4 className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">User Listing</h4>
             <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">
             <Button
                 btn_title="Add New User"
