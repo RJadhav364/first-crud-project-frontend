@@ -6,7 +6,7 @@ import { emailregx } from '../validation/InputValidation'
 import { updateUser } from '../pages/Admin/usersList/services/UserRelatedApis'
 
 const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList,fetchSingleUserData,passedListingFunction}) => {
-    console.log("isUserModelOpen",isUserModelOpen)
+    // console.log("isUserModelOpen",isUserModelOpen)
     const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
     const modalBody = useRef("");
     const userEdit = useRef("");
@@ -22,7 +22,7 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
         number: "",
         handledSubAdmin: ""
     });
-    console.log(createPersonData.current)
+    // console.log(createPersonData.current)
     const handleUpdateUser = async() => {
         // console.log(createPersonData.current)
         let formValues = {};

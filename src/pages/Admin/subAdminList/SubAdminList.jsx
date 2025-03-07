@@ -412,6 +412,10 @@ const SubAdminList = () => {
             handleRecallListing={allSubAdminList}
             userEditData={adminfetchData.current}
         />
+        <div className="cardano before:animate-spinGradient after:animate-spinGradient my-0 mx-auto padding-[2em] w-[300px] bg-[#1c1f2b] text-center rounded-[10px] relative after:contents-['*'] before:contents-['*'] after:absolute before:absolute after:h-[220px] before:h-[220px] after:w-[305px] before:w-[305px] after:top-2/4 after:left-2/4 before:top-2/4 before:left-2/4 after:translate-x-[-50%] after:translate-y-[-50%]  before:translate-x-[-50%] before:translate-y-[-50%] after:z-[-1]  before:z-[-1] after:p-[3px] before:p-[3px] after:rounded-[10px] before:rounded-[10px] before:opacity-[0.5] after:blur-[1.5rem] before:blur-[1.5rem] after:bg-background-image before:bg-background-image">
+            <h1 className='text-white'>Animate Borders</h1>
+            <p className='text-white'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque ad exercitationem voluptatem ullam et, natus impedit quae veniam optio a doloremque officiis beatae, itaque nesciunt nostrum quasi molestiae laudantium dolor asperiores soluta sint sed ratione cupiditate. Laudantium earum reiciendis enim.</p>
+        </div>
     </>
   )
 }

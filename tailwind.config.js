@@ -17,6 +17,7 @@ export default {
       // Custom Animations for rotating (steps-based spin)
       animation: {
         'spin-slow': 'l26 1s infinite steps(12)',
+        spinGradient: 'spinGradient 3s linear infinite'
       },
       // Custom Keyframes for animation
       keyframes: {
@@ -25,6 +26,13 @@ export default {
             transform: 'rotate(1turn)',
           },
         },
+        spinGradient: {
+          from: { '--angle': '0deg' },
+          to: { '--angle': '360deg' },
+        },
+      },
+      backgroundImage:{
+        "background-image": "conic-gradient(from var(--angle), #ff4545, #00ff99, #006aff, #ff0095, #ff4545)"
       }
     },
   },

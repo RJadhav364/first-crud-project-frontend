@@ -18,9 +18,14 @@ export default function Example() {
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
             {/* Mobile menu button*/}
-            <button className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+            <button className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none ring-2 ring-inset ring-white">
               <span className="absolute -inset-0.5" />
               <span className="sr-only">Open main menu</span>
+              <svg viewBox="0 0 100 80" className="w-[20px] h-[17px]" fill="gray" >
+                <rect width="100" height="20"></rect>
+                <rect y="30" width="100" height="20"></rect>
+                <rect y="60" width="100" height="20"></rect>
+              </svg>
               {/* <Bars3Icon aria-hidden="true" className="block size-6 group-data-[open]:hidden" /> */}
               {/* <XMarkIcon aria-hidden="true" className="hidden size-6 group-data-[open]:block" /> */}
             </button>
@@ -29,7 +34,7 @@ export default function Example() {
             <div className="flex shrink-0 items-center">
               <img
                 alt="Your Company"
-                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
                 className="h-8 w-auto"
               />
             </div>
