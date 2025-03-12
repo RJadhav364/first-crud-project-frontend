@@ -1,7 +1,6 @@
 import { Service_url, urlEndForUser } from "../../../../../config/app.config";
 
 const getUserList = async({token,current_page}) => {
-    console.log(current_page)
     try{
         const response = await fetch(`${Service_url}${urlEndForUser}get-role-users?page=${current_page}`,{
             method: "GET",

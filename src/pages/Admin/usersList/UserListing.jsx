@@ -122,12 +122,13 @@ const UserListing = () => {
                           <th className=' text-left py-[12px] px-[7px]'>Role</th>
                           <th className=' text-left py-[12px] px-[7px]'>Assigned To</th>
                           <th className="text-left">Number</th>
+                          <th className="text-left">Status</th>
                           {storedrole != "User" && <th className="text-left">Action</th>}
                         </tr>
                       </thead>
                       <tbody>
                         {
-                          userData && userData.data && userData.data.length > 0 && userData.data.map(({firstname,role,id,email,lastname,number,authorizedDetails})=>(
+                          userData && userData.data && userData.data.length > 0 && userData.data.map(({firstname,role,id,email,lastname,number,authorizedDetails,status})=>(
                             <tr key={id}>
                               {/* <td className='border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px] w-[48px]'><input checked={hasAllRights == "yes"} type="checkbox" name="" id="" onChange={() =>
                               handleCheckboxChange(_id,hasAllRights)
@@ -139,6 +140,8 @@ const UserListing = () => {
                               <td className='border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]'>{role}</td>
                               <td className='border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]'>{authorizedDetails && authorizedDetails.firstname || "NA"}</td>
                               <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">{number}</td>
+                              {/* <td className="border-t-[.0625rem] border-solid border-[#ffffff1a]"><span className='text-[#e42855] bg-[#4e3b40] border border-transparent border-[#e4285533] flex justify-center items-center leading-[1] rounded-[.25rem] p-[.5rem] font-[500] text-sm tracking-[0.5px]'>{status}</span></td> */}
+                              <td className="border-t-[.0625rem] border-solid border-[#ffffff1a]"><span className={`${status == "Active" ? "text-[#00a261]" : "text-[#e42855]"} ${status == "Active" ? "bg-[#194633]" : "bg-[#4e3b40]"} border border-transparent border-[#e4285533] leading-[1] rounded-[.25rem] py-[2px] px-[3px] font-[500] text-sm tracking-[0.5px]`}>{status}</span></td>
                               {
                                 storedrole != "User" && (
                                 <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">

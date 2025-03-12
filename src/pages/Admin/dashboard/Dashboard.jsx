@@ -1,21 +1,47 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import useAuthStore from '../../../store/AuthStore'
+import DashboardCountBox from '../../../components/DashboardCountBox';
+import { getSubadminCount, getUserList } from './services/DashboardRelatedApi';
+import adminImage from "../../../assets/admin.png"
+import userImage from "../../../assets/user.png"
 
 const Dashboard = () => {
-  const {storedfirstname} = useAuthStore();
+  const {storedfirstname,token} = useAuthStore();
+  const [subAdminRecordsCount,setSubAdminRecordsCount] = useState({
+    subAdminCount: null,
+    usersCount: null
+  })
+  const fetchTotalCountControl = useRef(false);
+  const getSubadminTotalCount = async() => {
+    const subadminTotalResponse = await getSubadminCount({token,current_page:"only_count"});
+    const usersTotalResponse = await getUserList({token,current_page:"only_count"});
+    const subadminTotalCount = await subadminTotalResponse.json();
+    const UsersTotalCount = await usersTotalResponse.json();
+    // console.log(subadminTotalCount)
+    setSubAdminRecordsCount({subAdminCount:subadminTotalCount?.total_records,usersCount:UsersTotalCount?.total_records})
+  }
+  useEffect(()=>{
+    if (fetchTotalCountControl.current) return;
+    fetchTotalCountControl.current = true;
+    getSubadminTotalCount();
+  })
   return (
     <div className='w-full h-full text-white'>
       <div className='mx-[20px] py-[20px]'>
         <h1 className='text-xl'>Hi, {storedfirstname}</h1>
-        <div className='grid grid-cols-2 gap-[60px] mt-[10px]'>
-          <div className='p-4'><div className="cardano p-[20px] before:animate-spinGradient after:animate-spinGradient my-0 mx-auto padding-[2em] w-full bg-[#1c1f2b] text-center rounded-[10px] relative after:contents-['*'] before:contents-['*'] after:absolute before:absolute after:h-full before:h-full after:w-full before:w-full after:top-2/4 after:left-2/4 before:top-2/4 before:left-2/4 after:translate-x-[-50%] after:translate-y-[-50%]  before:translate-x-[-50%] before:translate-y-[-50%] after:z-[-1]  before:z-[-1] after:p-[3px] before:p-[3px] after:rounded-[10px] before:rounded-[10px] before:opacity-[0.5] after:blur-[1.5rem] before:blur-[1.5rem] after:bg-background-image before:bg-background-image">
-            <h1 className='text-white'>Animate Borders</h1>
-            <p className='text-white'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque ad exercitationem voluptatem ullam et, natus impedit quae veniam optio a doloremque officiis beatae, itaque nesciunt nostrum quasi molestiae laudantium dolor asperiores soluta sint sed ratione cupiditate. Laudantium earum reiciendis enim.</p>
-        </div></div>
-          <div className='p-4'><div className="cardano p-[20px] before:animate-spinGradient after:animate-spinGradient my-0 mx-auto padding-[2em] w-full bg-[#1c1f2b] text-center rounded-[10px] relative after:contents-['*'] before:contents-['*'] after:absolute before:absolute after:h-full before:h-full after:w-full before:w-full after:top-2/4 after:left-2/4 before:top-2/4 before:left-2/4 after:translate-x-[-50%] after:translate-y-[-50%]  before:translate-x-[-50%] before:translate-y-[-50%] after:z-[-1]  before:z-[-1] after:p-[3px] before:p-[3px] after:rounded-[10px] before:rounded-[10px] before:opacity-[0.5] after:blur-[1.5rem] before:blur-[1.5rem] after:bg-background-image before:bg-background-image">
-            <h1 className='text-white'>Animate Borders</h1>
-            <p className='text-white'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque ad exercitationem voluptatem ullam et, natus impedit quae veniam optio a doloremque officiis beatae, itaque nesciunt nostrum quasi molestiae laudantium dolor asperiores soluta sint sed ratione cupiditate. Laudantium earum reiciendis enim.</p>
-        </div></div>
+        <div className='grid grid-cols-4 gap-[60px] mt-[10px]'>
+          <div className='p-4'>
+            <DashboardCountBox gradient_color="bg-background-image" totalCount={subAdminRecordsCount.subAdminCount} boxHeading="SubAdmin Count" imgSource={adminImage} />
+          </div>
+          <div className='p-4'>
+            <DashboardCountBox gradient_color="bg-background-image-reverse" totalCount={subAdminRecordsCount.usersCount} boxHeading="Users Count" imgSource={userImage} />
+          </div>
+          <div className='p-4'>
+            <DashboardCountBox gradient_color="bg-background-image" totalCount={subAdminRecordsCount.usersCount} boxHeading="Users Count" imgSource={userImage} />
+          </div>
+          <div className='p-4'>
+            <DashboardCountBox gradient_color="bg-background-image-reverse" totalCount={subAdminRecordsCount.usersCount} boxHeading="Users Count" imgSource={userImage} />
+          </div>
         </div>
       </div>
     </div>

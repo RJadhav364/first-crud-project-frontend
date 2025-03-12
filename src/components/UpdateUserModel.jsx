@@ -20,14 +20,15 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
         email: "",
         role: "",
         number: "",
-        handledSubAdmin: ""
+        handledSubAdmin: "",
+        status: ""
     });
     // console.log(createPersonData.current)
     const handleUpdateUser = async() => {
         // console.log(createPersonData.current)
         let formValues = {};
         switch(true){
-            case createPersonData.current.firstname.value == "" || createPersonData.current.lastname.value == "" || createPersonData.current.email.value == "" || createPersonData.current.role.value == "" || createPersonData.current.number.value == "" || createPersonData.current.handledSubAdmin.value == "":
+            case createPersonData.current.firstname.value == "" || createPersonData.current.lastname.value == "" || createPersonData.current.email.value == "" || createPersonData.current.role.value == "" || createPersonData.current.number.value == "" || createPersonData.current.handledSubAdmin.value == "" || createPersonData.current.status.value == "":
                 alert("All fields are required");
                 break;
             case !emailregx.test(createPersonData.current.email.value):
@@ -199,6 +200,23 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                                             ))
                                         }
                                         </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div>
+                                    <div
+                                        className="group relative rounded-lg border focus-within:border-sky-200 px-3 pb-1.5 pt-2.5 duration-200 focus-within:ring focus-within:ring-sky-300/30">
+                                        <div className="flex justify-between">
+                                            <label
+                                                className="text-xs font-medium text-muted-foreground group-focus-within:text-white text-gray-400">Status</label>
+                                            <div className="absolute right-3 translate-y-2 text-green-200">
+                                                    </div>
+                                        </div>
+                                                <select name="status" id="status" className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground mt-[7px]" ref={(e)=>{createPersonData.current.status = e}}>
+                                                    <option selected={fetchSingleUserData?.data?.status == "Active"} value="Active" className='text-black'>Active</option>
+                                                    <option selected={fetchSingleUserData?.data?.status == "Inactive"} value="Inactive" className='text-black'>Inactive</option>
+                                                </select>
                                     </div>
                                 </div>
                             </div>
