@@ -185,12 +185,6 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                                             <div className="absolute right-3 translate-y-2 text-green-200">
                                                     </div>
                                         </div>
-                                        {/* <input type="text" name="lastname" placeholder="LastName"
-                                            autoComplete="off"
-                                            // value={createPersonData.current.firstname} 
-                                            // onChange={(e)=>{createPersonData.current.firstname = e}}
-                                            // ref={(e)=>{createPersonData.current.firstname = e}}
-                                            className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" /> */}
                                         <select name="handledSubAdmin" 
                                          id="handledSubAdmin" className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground mt-[7px]" ref={(e)=>{createPersonData.current.handledSubAdmin = e}}>
                                         {/* <option value="" selected disabled>{fetchSingleUserData?.data?.adminDetails?.firstname}</option> */}
