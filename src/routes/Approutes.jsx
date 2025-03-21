@@ -6,6 +6,7 @@ import Dashboard from '../pages/Admin/dashboard/Dashboard'
 import SubAdminList from '../pages/Admin/subAdminList/SubAdminList'
 import UserListing from '../pages/Admin/usersList/UserListing'
 import NotFound from '../pages/Admin/PageNotFound/NotFound'
+import UserDetailed from '../pages/Admin/user-profile/UserDetailed'
 
 const Approutes = () => {
   return (
@@ -15,6 +16,7 @@ const Approutes = () => {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="sub-admin" element={<SubAdminList />} />
           <Route path="users" element={<UserListing />} />
+          <Route path="user-profile/:id" element={<UserDetailed />} />
           <Route path="*" element={<NotFound />} />
         </Route>
     </Routes>

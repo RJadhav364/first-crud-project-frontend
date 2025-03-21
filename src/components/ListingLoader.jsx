@@ -1,4 +1,4 @@
-import Snake from "../../public/Snake.gif"
+import Snake from "../assets/Snake.gif"
 
 const ListingLoader = ({outerDivClass,insidedivClass}) => {
   return (

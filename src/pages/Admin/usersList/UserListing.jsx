@@ -98,12 +98,16 @@ const UserListing = () => {
           <div className="card-header pt-[15px] px-[15px] flex justify-between">
             <h4 className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">User Listing</h4>
             <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">
-            <Button
-                btn_title="Add New User"
-                classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2"
-                onclickFn={() => setIsCreateUserModel(true)}
-                // onclickFn={handleOpenToSHow}
-            />
+              {
+                storedrole != "User" && (
+                  <Button
+                      btn_title="Add New User"
+                      classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2"
+                      onclickFn={() => setIsCreateUserModel(true)}
+                      // onclickFn={handleOpenToSHow}
+                  />
+                )
+              }
             </div>
           </div>
           {

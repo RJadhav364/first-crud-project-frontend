@@ -6,13 +6,13 @@ import useAuthStore from '../store/AuthStore';
 const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnText,onClose,userEdit,handleConfirmButtonFn,outsideClickAllowed,modal_title,confirmButtonVisible,cancelButtonVisible}) => {
   const {token} = useAuthStore();
     const [modalClass, setModalClass] = useState('opacity-0 scale-90 pointer-events-none');
-    useEffect(() => {
-        if (isOpen) {
-          setModalClass('opacity-100 scale-100 pointer-events-auto'); // Modal is fully visible and interactive
-        } else {
-          setModalClass('opacity-0 scale-90 pointer-events-none'); // Modal hidden and non-interactive
-        }
-      }, [isOpen]);
+    // useEffect(() => {
+    //     if (isOpen) {
+    //       setModalClass('opacity-100 scale-100 pointer-events-auto'); // Modal is fully visible and interactive
+    //     } else {
+    //       setModalClass('opacity-0 scale-90 pointer-events-none'); // Modal hidden and non-interactive
+    //     }
+    //   }, [isOpen]);
       const handleConfirmButton = async() => {
         // switch(true){
             // case userEdit == "deleteSubadmin":
@@ -36,18 +36,18 @@ const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnTex
       }
   return (
     <>
-      {
+      {/* {
         isOpen && (
-            <>
+            <> */}
               <div
-                className="z-[102] fixed inset-0 bg-black/10 backdrop-blur-[1px] "
+                className={`z-[102] fixed inset-0 bg-black/10 backdrop-blur-[1px] ${isOpen ? "block" : "hidden"}`}
                 // onClick={outsideClickAllowed == true && onClose}
                 onClick={outsideClickAllowed && typeof onClose === 'function' ? onClose : undefined}
 
               >
               </div>
               <div
-                className={`z-[102] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-auto flex flex-col gap-4 p-0 bg-[#212529] rounded-lg shadow-lg  overflow-auto w-[500px] border-[1px] border-solid border-[#ffffff26] transition-all duration-700 ease-in-out ${modalClass}`}
+                className={`z-[102] fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 m-auto flex flex-col gap-4 p-0 bg-[#212529] rounded-lg shadow-lg  overflow-auto w-[500px] border-[1px] border-solid border-[#ffffff26] transition-all duration-700 ease-in-out ${isOpen ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-90 pointer-events-none"}`}
                 onClick={(e) => e.stopPropagation()} 
               >
                 <div className='h-full w-full'>
@@ -69,9 +69,9 @@ const ConfirmationBox = ({isOpen,confirmationMessage,confirmBtnText,cancelBtnTex
                     </div>
                 </div>
               </div>
-            </>
+            {/* </>
         )
-      }
+      } */}
     </>
   )
 }
