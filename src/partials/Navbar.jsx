@@ -129,7 +129,7 @@ export default function Example() {
                 {/* <div as="div" className="relative inline-block text-left"> */}
                       <div
                         transition
-                        className={`absolute right-0 z-10 mt-2 w-[135px] origin-top-right divide-y divide-gray-100 rounded-md bg-[#212130] ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in ${isOpen ? "translate-y-[5px] opacity-1" : "translate-y-0 opacity-0"}`}
+                        className={`absolute right-0 z-10 mt-2 w-[135px] origin-top-right divide-y divide-gray-100 rounded-md bg-[#212130] ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in ${isOpen ? "translate-y-[5px] scale-y-100" : "translate-y-0 scale-y-0"}`}
                       >
                         <div className="py-1">
                           <div>

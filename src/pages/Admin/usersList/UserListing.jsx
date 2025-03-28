@@ -21,6 +21,10 @@ const UserListing = () => {
   const modalBody = useRef("");
   const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
   const [isLoadingSubadminList, setIsLoadingSubadminList] = useState(true);
+  const modelButtons = useRef({
+    showConfirmationBtn: "",
+    showCancelBtn: ""
+  })
   // all user list
   const allUserListFn = async(pageNumber) => {
     setIsLoadingSubadminList(true);
@@ -63,12 +67,14 @@ const UserListing = () => {
       case actionToPerform == "DeleteAction":
         modalBody.current = "Are you sure you want to delete this User";
         storePartcularUserData.current = id
+        modelButtons.current.showConfirmationBtn = true;
+        modelButtons.current.showCancelBtn = true;
         setIsConfirmationModelOpen(true);
     }
   }
   const handleConfirmButtonClick = async() => {
     setIsConfirmationModelOpen(false);
-    const deletedApiCall = await deleteUserById({token, id:storePartcularUserData.current});
+    const deletedApiCall = await deleteUserById({token, id:storePartcularUserData.current,hasAllRights: });
     switch(true){
         case deletedApiCall.status == 200:
             setIsConfirmationModelOpen(false);
@@ -78,8 +84,10 @@ const UserListing = () => {
             setIsReloginModelOpen(true);
             break;
         case deletedApiCall.status == 403:
-          console.log("abc")
-            modalBody.current = "Dont have permisson";
+          // console.log("abc")
+            modalBody.current = "Not authorized to perform this action";
+            modelButtons.current.showConfirmationBtn = false;
+            modelButtons.current.showCancelBtn = true;
             setIsConfirmationModelOpen(true);
             break;
     }
@@ -244,6 +252,8 @@ const UserListing = () => {
         confirmBtnText="Yes"
         cancelBtnText="Close"
         // userEdit={userEdit.current}
+        confirmButtonVisible={modelButtons.current.showConfirmationBtn}
+        cancelButtonVisible={modelButtons.current.showCancelBtn}
         handleConfirmButtonFn={handleConfirmButtonClick}
         onClose={() => setIsConfirmationModelOpen(false)}
       />

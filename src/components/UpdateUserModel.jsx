@@ -4,6 +4,7 @@ import Button from './Button'
 import useAuthStore from '../store/AuthStore'
 import { emailregx } from '../validation/InputValidation'
 import { updateUser } from '../pages/Admin/usersList/services/UserRelatedApis'
+import { toast } from 'react-toastify'
 
 const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList,fetchSingleUserData,passedListingFunction}) => {
     // console.log("isUserModelOpen",isUserModelOpen)
@@ -64,10 +65,15 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
         }
     }
     const handleFinalAction = async() => {
-        const getUpdatedUserResult = await updateUser({body: storeEditedValues.current, token: token,id:fetchSingleUserData.data.id,hasAllRights:storedhasAllRights});
         setIsConfirmationModelOpen(false);
-        // console.log(getUpdatedUserResult)
+        const getUpdatedUserResult = await updateUser({body: storeEditedValues.current, token: token,id:fetchSingleUserData.data.id,hasAllRights: fetchSingleUserData.data.adminDetails.hasAllRights});
+        // fetchSingleUserData.data.adminDetails.hasAllRights
+        console.log(getUpdatedUserResult)
         if(getUpdatedUserResult.status == 200){
+            toast.success("User Updated👍!",{
+                theme: "dark",
+                position: "top-center"
+            })
             setIsConfirmationModelOpen(false);
             onClosed();
             passedListingFunction();
@@ -76,6 +82,8 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
             setIsConfirmationModelOpen(true);
         } else if(getUpdatedUserResult.status == 403){
             modalBody.current = "You're not authorized to perform this action";
+            showCancelButton.current = true;
+            showConfirmButton.current = false;
             setIsConfirmationModelOpen(true);
         }
     }
@@ -288,6 +296,7 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
             isOpen={isConfirmationModelOpen}
             confirmationMessage={modalBody.current}
             confirmBtnText="OK"
+            cancelBtnText="Cancel"
             modal_title="Confirmation"
             onClose={() => setIsConfirmationModelOpen(false)}
             handleConfirmButtonFn={handleFinalAction}

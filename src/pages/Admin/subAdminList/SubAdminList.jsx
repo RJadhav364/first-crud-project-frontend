@@ -109,6 +109,8 @@ const SubAdminList = () => {
                 userEdit.current  = "provideAllRights"
                 storedSubadminId.current = id;
                 setIsConfirmationModelOpen(true);
+                showConfirmButton.current = true;
+                showCancelButton.current = true;
                 break;
         }
         // modalBody.current = "Are you sure you want to provide all rights"

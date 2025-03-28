@@ -11,7 +11,6 @@ import cancelmark from "../../assets/cancelmark.png"
 const Login = () => {
     const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
     const [isForgetPasswrodModelOpen , setIsForgetPasswrodModelOpen] = useState(undefined);
-    const [activated,setActivated] = useState(true);
     const modalBody = useRef("");
     const showConfirmButton = useRef(false);
     const showCancelButton = useRef(false);
@@ -82,9 +81,6 @@ const Login = () => {
                         modalBody.current = "Something went wrong";
                 }
         }
-    }
-    const handleOpenForgetPModal = () => {
-
     }
   return (
     // <!-- component -->

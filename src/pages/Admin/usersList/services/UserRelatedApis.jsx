@@ -67,7 +67,8 @@ const updateUser = async({body,token,id,hasAllRights}) => {
         // console.log(result);
         return response
     } catch(err){
-        console.log(err);
+        throw err
+        // console.log(err);
     }
 }
 
