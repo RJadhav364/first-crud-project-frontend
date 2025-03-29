@@ -9,6 +9,7 @@ import UpdateUserModel from '../../../components/UpdateUserModel';
 import ConfirmationBox from '../../../components/ConfirmationBox';
 import Pagination from '../../../components/Pagination';
 import ListingLoader from '../../../components/ListingLoader';
+import noDatafound from "../../../assets/no-data.png"
 
 const UserListing = () => {
   const [userData , setUserData] = useState([]);
@@ -37,7 +38,7 @@ const UserListing = () => {
           setIsReloginModelOpen(true);
           break;
       case result.status == 200:
-          setUserData(data);
+          setUserData(data.data.length == 0 ? null : data);
           setIsLoadingSubadminList(false);
           break;
     }
@@ -74,7 +75,7 @@ const UserListing = () => {
   }
   const handleConfirmButtonClick = async() => {
     setIsConfirmationModelOpen(false);
-    const deletedApiCall = await deleteUserById({token, id:storePartcularUserData.current,hasAllRights: });
+    const deletedApiCall = await deleteUserById({token, id:storePartcularUserData.current,hasAllRights: userData});
     switch(true){
         case deletedApiCall.status == 200:
             setIsConfirmationModelOpen(false);
@@ -123,6 +124,18 @@ const UserListing = () => {
               <ListingLoader outerDivClass="w-full h-full flex justify-center items-center py-[50px]" insidedivClass="w-[100px] h-[100px]" />
             ) : (
               <>
+              {
+                userData == null ? (
+                  <div className="w-full text-center flex justify-center items-center flex-col h-full">
+                                    <h2 className="">
+                                        <img src={noDatafound} className='h-[200px]' />
+                                    </h2>
+                                    <div className='-mt-3'>
+                                      <p className="text-2xl font-semibold md:text-3xl text-gray-50">No Data Found.</p>
+                                      <p className="mt-4 mb-8 text-[#919dae]">We're sorry what you were looking for. Please try another way.</p>
+                                    </div>
+                                </div>
+                ) : (
               <div className="card-body p-[15px]">
                   <div className="table-responsive ps w-full block">
                     <table className="tablesorter table w-full">
@@ -218,6 +231,8 @@ const UserListing = () => {
                                                       </div>
                                                       </div>
                                                       </div>
+                )
+              }
                                                       <Pagination 
                                                         fetchDataDetail={userData}
                                                         passedListingFunction={allUserListFn}

@@ -10,6 +10,7 @@ import { toast } from 'react-toastify';
 import Pagination from '../../../components/Pagination';
 import Snake from "../../../assets/Snake.gif"
 import ListingLoader from '../../../components/ListingLoader';
+import noDatafound from "../../../assets/no-data.png"
 
 const SubAdminList = () => {
     const fetchsubadminList = useRef(false); //to control api call of subadmins list
@@ -37,7 +38,7 @@ const SubAdminList = () => {
                 setIsReloginModelOpen(true);
                 break;
             case result.status == 200:
-                setSubAdminsData(data);
+                setSubAdminsData(data.data.length == 0 ? null : data);
                 setIsLoadingSubadminList(false);
                 break;
         }
@@ -177,153 +178,170 @@ const SubAdminList = () => {
                     isLoadingSubadminList == true ? (
                         <ListingLoader outerDivClass="w-full h-full flex justify-center items-center py-[50px]" insidedivClass="w-[100px] h-[100px]" />
                     ) : (
-                    <div className="card-body p-[15px]">
-                        <div className="table-responsive ps w-full block">
-                        <table className="tablesorter table w-full">
-                            <thead className="text-primary">
-                            <tr>
-                                <th className=" text-left py-[12px] px-[7px]"></th>
-                                <th className=" text-left py-[12px] px-[7px]">Name</th>
-                                <th className=" text-left py-[12px] px-[7px]">Email</th>
-                                <th className=" text-left py-[12px] px-[7px]">Role</th>
-                                <th className="text-left">Number</th>
-                                {/* <th className="text-left">CRUD Rights</th> */}
-                                {
-                                    storedrole == "admin" && (
-                                        <th className="text-left">Action</th>
-                                    )
-                                }
-                                {
-                                    storedrole == "User" && (
-                                        <th className="text-left">CRUD Rights</th>
-                                    )
-                                }
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {subAdminsData && subAdminsData.data &&
-                                subAdminsData.data.length > 0 &&
-                                subAdminsData.data.map(
-                                ({ firstname, role, _id, email, hasAllRights, mnumber }) => (
-                                    <tr key={_id}>
-                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px] w-[48px]">
-                                        {
-                                            role == "subadmin" && storedrole == "admin"  && (
-                                                <input
-                                                    checked={hasAllRights == "Yes"}
-                                                    type="checkbox"
-                                                    name=""
-                                                    id=""
-                                                    onChange={() =>
-                                                        handleCheckboxChange(_id, hasAllRights)
+                        // console.log(subAdminsData)
+                        <>
+                            {
+                                subAdminsData == null ? (
+                                <div className="w-full text-center flex justify-center items-center flex-col h-full">
+                                    <h2 className="">
+                                        <img src={noDatafound} className='h-[200px]' />
+                                    </h2>
+                                    <div className='-mt-3'>
+                                      <p className="text-2xl font-semibold md:text-3xl text-gray-50">No Data Found.</p>
+                                      <p className="mt-4 mb-8 text-[#919dae]">We're sorry what you were looking for. Please try another way.</p>
+                                    </div>
+                                </div>
+                                ) : (
+                                    <div className="card-body p-[15px]">
+                                        <div className="table-responsive ps w-full block">
+                                        <table className="tablesorter table w-full">
+                                            <thead className="text-primary">
+                                            <tr>
+                                                <th className=" text-left py-[12px] px-[7px]"></th>
+                                                <th className=" text-left py-[12px] px-[7px]">Name</th>
+                                                <th className=" text-left py-[12px] px-[7px]">Email</th>
+                                                <th className=" text-left py-[12px] px-[7px]">Role</th>
+                                                <th className="text-left">Number</th>
+                                                {/* <th className="text-left">CRUD Rights</th> */}
+                                                {
+                                                    storedrole == "admin" && (
+                                                        <th className="text-left">Action</th>
+                                                    )
+                                                }
+                                                {
+                                                    storedrole == "User" && (
+                                                        <th className="text-left">CRUD Rights</th>
+                                                    )
+                                                }
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {subAdminsData && subAdminsData.data &&
+                                                subAdminsData.data.length > 0 &&
+                                                subAdminsData.data.map(
+                                                ({ firstname, role, _id, email, hasAllRights, mnumber }) => (
+                                                    <tr key={_id}>
+                                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px] w-[48px]">
+                                                        {
+                                                            role == "subadmin" && storedrole == "admin"  && (
+                                                                <input
+                                                                    checked={hasAllRights == "Yes"}
+                                                                    type="checkbox"
+                                                                    name=""
+                                                                    id=""
+                                                                    onChange={() =>
+                                                                        handleCheckboxChange(_id, hasAllRights)
+                                                                    }
+                                                                />
+                                                            )
+                                                        }
+                                                        {/* <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M17.9 2.318A5 5 0 0 1 22.895 7.1l.005.217v10a5 5 0 0 1-4.783 4.995l-.217.005h-10a5 5 0 0 1-4.995-4.783l-.005-.217v-10a5 5 0 0 1 4.783-4.996l.217-.004h10Zm-.5 1.5h-9a4 4 0 0 0-4 4v9a4 4 0 0 0 4 4h9a4 4 0 0 0 4-4v-9a4 4 0 0 0-4-4Z" /></svg> */}
+                                                    </td>
+                                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
+                                                        {firstname}
+                                                    </td>
+                                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
+                                                        {email}
+                                                    </td>
+                                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
+                                                        {role}
+                                                    </td>
+                                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
+                                                        {mnumber}
+                                                    </td>
+                                                    {
+                                                        storedrole == "admin" && (
+                                                            <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
+                                                                <div className="relative flex text-left">
+                                                                <button
+                                                                    className="relative h-10 max-h-[20px] w-10 max-w-[20px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                    handleOpenModel(_id, "EditAction");
+                                                                    }}
+                                                                >
+                                                                    <span className="absolute transhtmlForm -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                                                                    <svg
+                                                                        xmlns="http:www.w3.org/2000/svg"
+                                                                        viewBox="0 0 24 24"
+                                                                        fill="white"
+                                                                        aria-hidden="true"
+                                                                        className="w-4 h-4"
+                                                                    >
+                                                                        <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"></path>
+                                                                    </svg>
+                                                                    </span>
+                                                                </button>
+                                                                <button
+                                                                    className="relative h-10 max-h-[20px] w-10 max-w-[20px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                                                    type="button"
+                                                                    onClick={() => {
+                                                                    handleOpenModel(_id, "DeleteAction");
+                                                                    }}
+                                                                >
+                                                                    <span className="absolute transhtmlForm -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
+                                                                    <svg
+                                                                        id="Layer_1"
+                                                                        className="w-4 h-4"
+                                                                        data-name="Layer 1"
+                                                                        fill="white"
+                                                                        xmlns="http://www.w3.org/2000/svg"
+                                                                        viewBox="0 0 110.61 122.88"
+                                                                    >
+                                                                        <title>trash</title>
+                                                                        <path d="M39.27,58.64a4.74,4.74,0,1,1,9.47,0V93.72a4.74,4.74,0,1,1-9.47,0V58.64Zm63.6-19.86L98,103a22.29,22.29,0,0,1-6.33,14.1,19.41,19.41,0,0,1-13.88,5.78h-45a19.4,19.4,0,0,1-13.86-5.78l0,0A22.31,22.31,0,0,1,12.59,103L7.74,38.78H0V25c0-3.32,1.63-4.58,4.84-4.58H27.58V10.79A10.82,10.82,0,0,1,38.37,0H72.24A10.82,10.82,0,0,1,83,10.79v9.62h23.35a6.19,6.19,0,0,1,1,.06A3.86,3.86,0,0,1,110.59,24c0,.2,0,.38,0,.57V38.78Zm-9.5.17H17.24L22,102.3a12.82,12.82,0,0,0,3.57,8.1l0,0a10,10,0,0,0,7.19,3h45a10.06,10.06,0,0,0,7.19-3,12.8,12.8,0,0,0,3.59-8.1L93.37,39ZM71,20.41V12.05H39.64v8.36ZM61.87,58.64a4.74,4.74,0,1,1,9.47,0V93.72a4.74,4.74,0,1,1-9.47,0V58.64Z" />
+                                                                    </svg>
+                                                                    </span>
+                                                                </button>
+                                                                </div>
+                                                            </td>
+                                                        )
                                                     }
-                                                />
-                                            )
-                                        }
-                                        {/* <svg className="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M17.9 2.318A5 5 0 0 1 22.895 7.1l.005.217v10a5 5 0 0 1-4.783 4.995l-.217.005h-10a5 5 0 0 1-4.995-4.783l-.005-.217v-10a5 5 0 0 1 4.783-4.996l.217-.004h10Zm-.5 1.5h-9a4 4 0 0 0-4 4v9a4 4 0 0 0 4 4h9a4 4 0 0 0 4-4v-9a4 4 0 0 0-4-4Z" /></svg> */}
-                                    </td>
-                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
-                                        {firstname}
-                                    </td>
-                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
-                                        {email}
-                                    </td>
-                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
-                                        {role}
-                                    </td>
-                                    <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
-                                        {mnumber}
-                                    </td>
-                                    {
-                                        storedrole == "admin" && (
-                                            <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
-                                                <div className="relative flex text-left">
-                                                <button
-                                                    className="relative h-10 max-h-[20px] w-10 max-w-[20px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                                    type="button"
-                                                    onClick={() => {
-                                                    handleOpenModel(_id, "EditAction");
-                                                    }}
-                                                >
-                                                    <span className="absolute transhtmlForm -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                                                    <svg
-                                                        xmlns="http:www.w3.org/2000/svg"
-                                                        viewBox="0 0 24 24"
-                                                        fill="white"
-                                                        aria-hidden="true"
-                                                        className="w-4 h-4"
-                                                    >
-                                                        <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"></path>
-                                                    </svg>
-                                                    </span>
-                                                </button>
-                                                <button
-                                                    className="relative h-10 max-h-[20px] w-10 max-w-[20px] select-none rounded-lg text-center align-middle font-sans text-xs font-medium uppercase text-slate-900 transition-all hover:bg-slate-900/10 active:bg-slate-900/20 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                                    type="button"
-                                                    onClick={() => {
-                                                    handleOpenModel(_id, "DeleteAction");
-                                                    }}
-                                                >
-                                                    <span className="absolute transhtmlForm -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2">
-                                                    <svg
-                                                        id="Layer_1"
-                                                        className="w-4 h-4"
-                                                        data-name="Layer 1"
-                                                        fill="white"
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        viewBox="0 0 110.61 122.88"
-                                                    >
-                                                        <title>trash</title>
-                                                        <path d="M39.27,58.64a4.74,4.74,0,1,1,9.47,0V93.72a4.74,4.74,0,1,1-9.47,0V58.64Zm63.6-19.86L98,103a22.29,22.29,0,0,1-6.33,14.1,19.41,19.41,0,0,1-13.88,5.78h-45a19.4,19.4,0,0,1-13.86-5.78l0,0A22.31,22.31,0,0,1,12.59,103L7.74,38.78H0V25c0-3.32,1.63-4.58,4.84-4.58H27.58V10.79A10.82,10.82,0,0,1,38.37,0H72.24A10.82,10.82,0,0,1,83,10.79v9.62h23.35a6.19,6.19,0,0,1,1,.06A3.86,3.86,0,0,1,110.59,24c0,.2,0,.38,0,.57V38.78Zm-9.5.17H17.24L22,102.3a12.82,12.82,0,0,0,3.57,8.1l0,0a10,10,0,0,0,7.19,3h45a10.06,10.06,0,0,0,7.19-3,12.8,12.8,0,0,0,3.59-8.1L93.37,39ZM71,20.41V12.05H39.64v8.36ZM61.87,58.64a4.74,4.74,0,1,1,9.47,0V93.72a4.74,4.74,0,1,1-9.47,0V58.64Z" />
-                                                    </svg>
-                                                    </span>
-                                                </button>
-                                                </div>
-                                            </td>
-                                        )
-                                    }
-                                    {
-                                        storedrole == "User" && (
-                                            <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
-                                                {hasAllRights}
-                                            </td>
-                                        )
-                                    }
-                                    </tr>
-                                ),
-                                )}
-                            </tbody>
-                        </table>
-                        <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                            <div
-                            className="ps__thumb-x"
-                            tabIndex={0}
-                            style={{ left: 0, width: 0 }}
-                            />
-                        </div>
-                        <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                            <div
-                            className="ps__thumb-y"
-                            tabIndex={0}
-                            style={{ top: 0, height: 0 }}
-                            />
-                        </div>
-                        <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
-                            <div
-                            className="ps__thumb-x"
-                            tabIndex={0}
-                            style={{ left: 0, width: 0 }}
-                            />
-                        </div>
-                        <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
-                            <div
-                            className="ps__thumb-y"
-                            tabIndex={0}
-                            style={{ top: 0, height: 0 }}
-                            />
-                        </div>
-                        </div>
-                    </div>
+                                                    {
+                                                        storedrole == "User" && (
+                                                            <td className="border-t-[.0625rem] border-solid border-[#ffffff1a] py-[12px] px-[7px]">
+                                                                {hasAllRights}
+                                                            </td>
+                                                        )
+                                                    }
+                                                    </tr>
+                                                ),
+                                                )}
+                                            </tbody>
+                                        </table>
+                                        <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
+                                            <div
+                                            className="ps__thumb-x"
+                                            tabIndex={0}
+                                            style={{ left: 0, width: 0 }}
+                                            />
+                                        </div>
+                                        <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
+                                            <div
+                                            className="ps__thumb-y"
+                                            tabIndex={0}
+                                            style={{ top: 0, height: 0 }}
+                                            />
+                                        </div>
+                                        <div className="ps__rail-x" style={{ left: 0, bottom: 0 }}>
+                                            <div
+                                            className="ps__thumb-x"
+                                            tabIndex={0}
+                                            style={{ left: 0, width: 0 }}
+                                            />
+                                        </div>
+                                        <div className="ps__rail-y" style={{ top: 0, right: 0 }}>
+                                            <div
+                                            className="ps__thumb-y"
+                                            tabIndex={0}
+                                            style={{ top: 0, height: 0 }}
+                                            />
+                                        </div>
+                                        </div>
+                                    </div>
+                                )
+                            }
+                        </>
                     )
                 }
                 {/* <div className="">

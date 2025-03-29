@@ -34,17 +34,17 @@ const Pagination = ({fetchDataDetail,passedListingFunction}) => {
             </div>
             <div>
                 <nav aria-label="Pagination" className="isolate inline-flex -space-x-px rounded-md shadow-sm gap-[5px]">
-                    <Button btn_title="Previous" classes="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0" onclickFn={() => {handlePageChange(fetchDataDetail.current_page - 1)}} disbaledLogic={fetchDataDetail.current_page == 1} />
+                    <Button btn_title="Previous" classes="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0" onclickFn={() => {handlePageChange(fetchDataDetail?.current_page - 1)}} disbaledLogic={fetchDataDetail?.current_page == 1} />
                     {Array.from(
-                        { length: fetchDataDetail.total_page },
+                        { length: fetchDataDetail?.total_page },
                         (_, index) => index + 1
                         )
                         .filter(
                             (pageNumber) =>
                             // Display only a range of pages(e.g., 2 pages before and 2 pages after the current page)
-                            pageNumber >= Math.max(1, fetchDataDetail.current_page - 2) &&
+                            pageNumber >= Math.max(1, fetchDataDetail?.current_page - 2) &&
                             pageNumber <=
-                                Math.min(fetchDataDetail.total_page, fetchDataDetail.current_page + 2)
+                                Math.min(fetchDataDetail?.total_page, fetchDataDetail?.current_page + 2)
                         )
                         .map((pageNumber) => (
                             <Button
@@ -54,7 +54,7 @@ const Pagination = ({fetchDataDetail,passedListingFunction}) => {
                             classes="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 h-full"
                             />
                     ))}
-                    <Button classes={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${fetchDataDetail.total_page == fetchDataDetail.current_page ? "cursor-not-allowed" : ""}`} btn_title="Next" onclickFn={() => {handlePageChange(fetchDataDetail.current_page + 1)}} disbaledLogic={fetchDataDetail.total_page == fetchDataDetail.current_page} />
+                    <Button classes={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${fetchDataDetail?.total_page == fetchDataDetail?.current_page ? "cursor-not-allowed" : ""}`} btn_title="Next" onclickFn={() => {handlePageChange(fetchDataDetail?.current_page + 1)}} disbaledLogic={fetchDataDetail?.total_page == fetchDataDetail?.current_page} />
                 </nav>
             </div>
         </div>
