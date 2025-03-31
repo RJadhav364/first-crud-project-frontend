@@ -72,7 +72,7 @@ const updateUser = async({body,token,id,hasAllRights}) => {
     }
 }
 
-const deleteUserById = async({token,id}) => {
+const deleteUserById = async({token,id,hasAllRights}) => {
     try{
         const response = await fetch(`${Service_url}${urlEndForUser}get-role-users/${id}`,{
             method: "DELETE",
@@ -80,6 +80,7 @@ const deleteUserById = async({token,id}) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
+            body: JSON.stringify({hasAllRights})
         })
         // const result  = await response.json();
         // console.log(result);

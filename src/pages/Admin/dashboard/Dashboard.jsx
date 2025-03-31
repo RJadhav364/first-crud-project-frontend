@@ -14,7 +14,7 @@ const Dashboard = () => {
     subAdminCount: null,
     usersCount: null,
     inActiveUsers: null,
-    userData: null
+    userData: []
   })
   const [isLoading,setIsLoading] = useState(false);
   const [isReloginModelOpen,setIsReloginModelOpen] = useState(false);
@@ -31,7 +31,7 @@ const Dashboard = () => {
       }
       const subadminTotalCount = await subadminTotalResponse.json();
       const UsersTotalCount = await usersTotalResponse.json();
-      console.log(subadminTotalCount)
+      // console.log(subadminTotalCount)
       setSubAdminRecordsCount(
         {subAdminCount:subadminTotalCount?.total_records,usersCount:UsersTotalCount?.totalUsersCount,
         inActiveUsers: UsersTotalCount?.inactiveUsers,

@@ -75,7 +75,8 @@ const UserListing = () => {
   }
   const handleConfirmButtonClick = async() => {
     setIsConfirmationModelOpen(false);
-    const deletedApiCall = await deleteUserById({token, id:storePartcularUserData.current,hasAllRights: userData});
+    console.log(userData)
+    const deletedApiCall = await deleteUserById({token, id:storePartcularUserData.current,hasAllRights: userData.data[0].authorizedDetails.hasAllRights});
     switch(true){
         case deletedApiCall.status == 200:
             setIsConfirmationModelOpen(false);
@@ -131,7 +132,7 @@ const UserListing = () => {
                                         <img src={noDatafound} className='h-[200px]' />
                                     </h2>
                                     <div className='-mt-3'>
-                                      <p className="text-2xl font-semibold md:text-3xl text-gray-50">No Data Found.</p>
+                                      <p className="text-2xl font-semibold md:text-3xl text-gray-50">No Data.</p>
                                       <p className="mt-4 mb-8 text-[#919dae]">We're sorry what you were looking for. Please try another way.</p>
                                     </div>
                                 </div>

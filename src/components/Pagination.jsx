@@ -2,10 +2,10 @@ import React from 'react'
 import Button from './Button'
 
 const Pagination = ({fetchDataDetail,passedListingFunction}) => {
-    // console.log(fetchDataDetail)
+    console.log(fetchDataDetail)
     // const {token} = useAuthStore();
     const handlePageChange = (gotNumber) => {
-        console.log(gotNumber)
+        // console.log(gotNumber)
         // isCreateEditModel.current = true;
         passedListingFunction(gotNumber); 
     }
@@ -34,7 +34,7 @@ const Pagination = ({fetchDataDetail,passedListingFunction}) => {
             </div>
             <div>
                 <nav aria-label="Pagination" className="isolate inline-flex -space-x-px rounded-md shadow-sm gap-[5px]">
-                    <Button btn_title="Previous" classes="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0" onclickFn={() => {handlePageChange(fetchDataDetail?.current_page - 1)}} disbaledLogic={fetchDataDetail?.current_page == 1} />
+                    <Button btn_title="Previous" classes={`relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${fetchDataDetail?.current_page == null || fetchDataDetail?.current_page == 1 ?  "cursor-not-allowed" : ""}`} onclickFn={() => {handlePageChange(fetchDataDetail?.current_page - 1)}} disbaledLogic={fetchDataDetail?.current_page == 1 || fetchDataDetail?.current_page == null} />
                     {Array.from(
                         { length: fetchDataDetail?.total_page },
                         (_, index) => index + 1

@@ -104,6 +104,8 @@ const SubAdminList = () => {
                 userEdit.current  = "removeRights"
                 storedSubadminId.current = id;
                 setIsConfirmationModelOpen(true);
+                showConfirmButton.current = true;
+                showCancelButton.current = true;
                 break;
             default: 
                 modalBody.current = "Are you sure you want to provide all rights";
@@ -232,6 +234,7 @@ const SubAdminList = () => {
                                                                     onChange={() =>
                                                                         handleCheckboxChange(_id, hasAllRights)
                                                                     }
+                                                                    className='cursor-pointer'
                                                                 />
                                                             )
                                                         }

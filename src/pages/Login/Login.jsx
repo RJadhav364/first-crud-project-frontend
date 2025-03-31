@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from "react"
 import Button from "../../components/Button"
-import { loginUser } from "./services/loginApi";
+import { handleGetUserTosendLink, loginUser } from "./services/loginApi";
 import {Link, useNavigate} from "react-router-dom"
 import useAuthStore from "../../store/AuthStore";
 import ConfirmationBox from "../../components/ConfirmationBox";
 import { toast } from "react-toastify";
 import cancelmark from "../../assets/cancelmark.png"
+import { emailregx } from "../../validation/InputValidation";
 
 // import "../index.css"
 const Login = () => {
@@ -80,6 +81,18 @@ const Login = () => {
                         showCancelButton.current = false;
                         modalBody.current = "Something went wrong";
                 }
+        }
+    }
+    const handleSendLink = async() => {
+        // console.log(userCredentials.current.email);
+        !emailregx.test(userCredentials.current.email);
+        switch(true){
+            case !emailregx.test(userCredentials.current.email):
+                alert("Enter valid email");
+                break;
+            default:
+                const getPasswordresetLinkRes = await handleGetUserTosendLink(userCredentials.current.email);
+                console.log(getPasswordresetLinkRes)
         }
     }
   return (
@@ -181,8 +194,8 @@ const Login = () => {
         `}>
         <h2 className="text-white text-[1.5rem] uppercase text-center p-[5px_40px_10px_40px]">Forgot Password?</h2>
         <p className="text-white text-[12px]">You can reset your Password here</p>
-        <input type="text" className="passInput mt-[15px] w-[80%] border-b-[2px] border-solid  border-[deepskyblue] text-[15px] text-white outline-none bg-transparent" placeholder="Email address" />
-        <button className="bg-[deepskyblue] text-white uppercase p-[10px] w-[80%] mt-[15px]">Send My Password</button>
+        <input autoComplete="off" onChange={(e)=>{handleInputChange("email",e.target.value)}} type="email" className="passInput mt-[15px] w-[80%] border-b-[2px] border-solid  border-[deepskyblue] text-[15px] text-white outline-none bg-transparent" placeholder="Email address" />
+        <Button btn_title="Send My Password" classes="bg-[deepskyblue] text-white uppercase p-[10px] w-[80%] mt-[15px] w-full" onclickFn={handleSendLink}/>
         {/* <button className=" text-white uppercase p-[10px]  mt-[15px]">Cancel</button> */}
         <div className="btn relative w-[155px] min-h-[50px] m-[20px] group before:content-[''] before:absolute before:left-1/2 before:-translate-x-[14px] before:bottom-[-5px] before:w-[30px] before:h-[10px] before:bg-red before:rounded-[10px] before:duration-[0.2s] before:delay-0 hover:before:bottom-[2px] hover:before:-translate-x-[50px] hover:before:h-1/2 hover:before:w-[80%] hover:before:rounded-[30px] hover:before:delay-[0.5s] after:content-[''] after:absolute after:translate-x-[60px] after:top-[-5px] after:w-[30px] after:h-[10px] after:bg-red after:rounded-[10px] after:duration-[0.2s] after:delay-[0s] hover:after:top-0 hover:after:translate-x-[10px] hover:after:h-1/2 hover:after:w-[80%] hover:after:rounded-[30px] hover:after:delay-[0.5s] before:bg-[#2bd2ff] before:shadow-neon-pink after:bg-[#2bd2ff] after:shadow-neon-pink">
             <a onClick={() => setIsForgetPasswrodModelOpen(false)} className="absolute top-0 left-0 w-full h-full flex  justify-center items-center bg-[#ffffff0d] shadow-[0_15px_35px_rgba(0, 0, 0, 0.2)] border-y-[#ffffff1a] rounded-[30px] text-white z-[1] font-[400] leading-[1px] no-underline overflow-hidden duration-[0.8s] backdrop-blur-[15px] before:content-[''] before:absolute before:top-0 before:left-0 before:w-1/2 before:h-full before:bg-gradient-to-l  before:from-[rgba(255_255_255_0.15)]  before:to-transparent before:skew-x-[45deg]  before:translate-x-0  before:duration-[0.8s] group-hover:before:skew-x-[45deg] group-hover:before:translate-x-[200%] cursor-pointer">

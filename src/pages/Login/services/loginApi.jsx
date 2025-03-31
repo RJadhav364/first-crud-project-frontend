@@ -30,4 +30,21 @@ const loginUser = async(requestedcredentials) => {
     }
 }
 
-export {loginUser}
+// send email to get pasword reset link
+
+const handleGetUserTosendLink = async(requestedEmail) => {
+    try {
+        const response = await fetch(`${Service_url}${urlEnd}password-link`,{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json' // Ensure the Content-Type is set to application/json
+            },
+            body: JSON.stringify({email: requestedEmail})
+        });
+        return response;
+    } catch (error) {
+        
+    }
+}
+
+export {loginUser,handleGetUserTosendLink}
