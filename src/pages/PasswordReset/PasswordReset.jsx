@@ -1,18 +1,29 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import Button from '../../components/Button'
 import { Link, useParams } from 'react-router-dom';
+import { sendNewPassword } from '../Login/services/loginApi';
+import { toast } from 'react-toastify';
+import ConfirmationBox from '../../components/ConfirmationBox';
 
 const PasswordReset = () => {
     const userCredentials = useRef({
         password: "",
         confirm_password: ""
     });
-    const {token} = useParams();
-    console.log(token)
+    const [allMOdelDetails,setAllMOdelDetails] = useState({
+        isConfirmationModelOpen: false,
+        modalBody: "",
+        showConfirmButton: false,
+        showCancelButton: false,
+        modal_title: ""
+    })
+    const [showRouteButton,setShowRouteButton] = useState(false);
+    const {id,token} = useParams();
+    // console.log(id,token)
     const handleInputChange = (fieldName, value) => {
         userCredentials.current[fieldName] = value
     }
-    const handleSubmitNewPassword = () => {
+    const handleSubmitNewPassword = async() => {
         switch(true){
             case userCredentials.current.password == "" || userCredentials.current.confirm_password == "":
                 alert("Both fields are required");
@@ -21,13 +32,29 @@ const PasswordReset = () => {
                 alert("Passwords do not match");
                 break;
             default:
-
+                const getNewPasswordResponse = await sendNewPassword({body: userCredentials.current.password, token});
+                // console.log(getNewPasswordResponse)
+                switch(true){
+                    case getNewPasswordResponse.status == 200:
+                        // alert("Password Changed");
+                        toast.success("Password Updated Successfully",{
+                            theme: "dark",
+                            position: "top-center"
+                        })
+                        setShowRouteButton(true);
+                        break;
+                    case getNewPasswordResponse.status == 401:
+                        setAllMOdelDetails({isConfirmationModelOpen: true,modalBody: "Session has expired",showConfirmButton: true,showCancelButton: false,modal_title: "Oops..."})
+                        break;
+                    default:
+                        setAllMOdelDetails({isConfirmationModelOpen: true,modalBody: "Error occured! Please again later",showConfirmButton: true,showCancelButton: false,modal_title: "Oops..."})
+                }
         }
     }
   return (
     <>
     {
-        token ? (
+        token && id ? (
             <div className="bg-black text-white flex min-h-screen flex-col items-center pt-16 sm:justify-center sm:pt-0">
                 <a href="#">
                     <div className="text-foreground font-semibold text-2xl tracking-tighter mx-auto flex items-center gap-2">
@@ -68,7 +95,7 @@ const PasswordReset = () => {
                                                             </svg>
                                                         </div>
                                             </div>
-                                            <input type="text" name="email" placeholder="Password"
+                                            <input type="text" name="email" placeholder="New Password"
                                                 autoComplete="off"
                                                 onChange={(e)=>{handleInputChange("password",e.target.value)}}
                                                 className="block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground" />
@@ -94,9 +121,15 @@ const PasswordReset = () => {
                                 </div>
                             </form>
                                 <div className="mt-4 flex items-center justify-end gap-x-2">
-                                    <Button 
-                                    onclickFn={handleSubmitNewPassword} 
-                                    btn_title="Log in" classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2" />
+                                    {
+                                        showRouteButton ? (
+                                            <Link to={"/"} className='font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2'>Back To Login</Link>
+                                        ) : (
+                                            <Button 
+                                            onclickFn={handleSubmitNewPassword} 
+                                            btn_title="Submit" classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2" />
+                                        )
+                                    }
                                 </div>
                         </div>
                     </div>
@@ -117,6 +150,18 @@ const PasswordReset = () => {
             </section>
         )
     }
+    <ConfirmationBox 
+    isOpen={allMOdelDetails.isConfirmationModelOpen}
+    confirmBtnText="Ok"
+    cancelBtnText="Close"
+    confirmationMessage={allMOdelDetails.modalBody}
+    modal_title={allMOdelDetails.modal_title}
+    outsideClickAllowed={false}
+    confirmButtonVisible={allMOdelDetails.showConfirmButton}
+    cancelButtonVisible={allMOdelDetails.showCancelButton}
+    onClose={() => setAllMOdelDetails({isConfirmationModelOpen: false})}
+    handleConfirmButtonFn={() => setAllMOdelDetails({isConfirmationModelOpen: false})}
+    />
     </>
   )
 }

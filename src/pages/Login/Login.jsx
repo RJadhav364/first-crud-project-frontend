@@ -92,7 +92,26 @@ const Login = () => {
                 break;
             default:
                 const getPasswordresetLinkRes = await handleGetUserTosendLink(userCredentials.current.email);
-                console.log(getPasswordresetLinkRes)
+                // console.log(getPasswordresetLinkRes)
+                switch(true){
+                    case getPasswordresetLinkRes.status == 200:
+                        toast.success("Link send sucessfully",{
+                            theme: "dark",
+                            position: "top-center"
+                        });
+                        break;
+                    case getPasswordresetLinkRes.status == 404:
+                        setIsConfirmationModelOpen(true);
+                        modalBody.current = "EmailId not found";
+                        showConfirmButton.current = true;
+                        showCancelButton.current = false;
+                        break;
+                    default:
+                        setIsConfirmationModelOpen(true);
+                        modalBody.current = "Error occured! Please again later";
+                        showConfirmButton.current = true;
+                        showCancelButton.current = false;
+                }
         }
     }
   return (

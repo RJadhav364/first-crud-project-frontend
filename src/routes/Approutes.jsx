@@ -15,7 +15,7 @@ const Approutes = () => {
     <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/*" element={<NotFound />} />
-        <Route path="/reset-password" element={<PasswordReset />} />
+        <Route path="/reset-password/:id/:token" element={<PasswordReset />} />
           <Route path="admin" element={<Admin />}>
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="sub-admin" element={<SubAdminList />} />

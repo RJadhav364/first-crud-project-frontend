@@ -43,8 +43,25 @@ const handleGetUserTosendLink = async(requestedEmail) => {
         });
         return response;
     } catch (error) {
-        
+        throw error;
     }
 }
 
-export {loginUser,handleGetUserTosendLink}
+const sendNewPassword = async({body,token}) => {
+    try {
+        const response = await fetch(`${Service_url}${urlEnd}reset-password`,{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json', // Ensure the Content-Type is set to application/json
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({password: body})
+        })
+        return response;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
+export {loginUser,handleGetUserTosendLink,sendNewPassword}
