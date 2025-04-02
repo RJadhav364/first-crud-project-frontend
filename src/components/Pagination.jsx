@@ -2,7 +2,7 @@ import React from 'react'
 import Button from './Button'
 
 const Pagination = ({fetchDataDetail,passedListingFunction}) => {
-    console.log(fetchDataDetail)
+    // console.log(fetchDataDetail)
     // const {token} = useAuthStore();
     const handlePageChange = (gotNumber) => {
         // console.log(gotNumber)

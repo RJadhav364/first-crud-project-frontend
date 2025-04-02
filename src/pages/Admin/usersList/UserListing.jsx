@@ -10,6 +10,7 @@ import ConfirmationBox from '../../../components/ConfirmationBox';
 import Pagination from '../../../components/Pagination';
 import ListingLoader from '../../../components/ListingLoader';
 import noDatafound from "../../../assets/no-data.png"
+import SelectedDropDown from '../../../components/SelectionDropDown';
 
 const UserListing = () => {
   const [userData , setUserData] = useState([]);
@@ -26,10 +27,14 @@ const UserListing = () => {
     showConfirmationBtn: "",
     showCancelBtn: ""
   })
+  const FilterValues = useRef({
+    firstname: "",
+    id: ""
+  })
   // all user list
   const allUserListFn = async(pageNumber) => {
     setIsLoadingSubadminList(true);
-    const result = await getUserList({token,current_page:pageNumber});
+    const result = await getUserList({token,current_page:pageNumber,filterByName :FilterValues.current.firstname.value, filterById: FilterValues.current.id});
     const data = await result.json();
     // console.log(await result.json());
     switch(true){
@@ -38,7 +43,7 @@ const UserListing = () => {
           setIsReloginModelOpen(true);
           break;
       case result.status == 200:
-          setUserData(data.data.length == 0 ? null : data);
+          setUserData(data?.data?.length == 0 ? null : data);
           setIsLoadingSubadminList(false);
           break;
     }
@@ -75,7 +80,7 @@ const UserListing = () => {
   }
   const handleConfirmButtonClick = async() => {
     setIsConfirmationModelOpen(false);
-    console.log(userData)
+    // console.log(userData)
     const deletedApiCall = await deleteUserById({token, id:storePartcularUserData.current,hasAllRights: userData.data[0].authorizedDetails.hasAllRights});
     switch(true){
         case deletedApiCall.status == 200:
@@ -100,14 +105,28 @@ const UserListing = () => {
           // fetchsubadminList.current
           allUserListFn(1);   
           authorizedPersonData();   
-      },[])
+  },[])
+  const handleSelectSubadmin = ({id}) => {
+    // console.log('filter applied',firstname,id)
+    FilterValues.current.id = id;
+  }
+  const handleApplyFilter = () => {
+    // console.log(FilterValues.current.firstname.value,FilterValues.current.id)
+    allUserListFn(1)
+  }
   return (
     <>
       <div className="w-full h-full text-white">
         <div className="card bg-[#27293d] m-[30px]">
           <div className="card-header pt-[15px] px-[15px] flex justify-between">
             <h4 className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">User Listing</h4>
-            <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">
+            <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem] flex gap-2">
+              <input type="text" ref={(e)=>{FilterValues.current.firstname = e}} name="firstname" id="firstname" placeholder='Enter Name' className='rounded-md  px-4 py-2 text-black font-semibold text-[16px]'/>
+              {
+                storedrole == "admin" && (
+                  <SelectedDropDown arrayData={storeAuthorizedData?.current} onStateChange={handleSelectSubadmin} />
+                )
+              }
               {
                 storedrole != "User" && (
                   <Button
@@ -118,6 +137,12 @@ const UserListing = () => {
                   />
                 )
               }
+              <Button
+                btn_title="Filter"
+                classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2 h-full w-[100px]"
+                // onclickFn={() => setIsCreateEditModel(true)}
+                onclickFn={handleApplyFilter}
+              />
             </div>
           </div>
           {

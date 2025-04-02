@@ -11,6 +11,7 @@ import Pagination from '../../../components/Pagination';
 import Snake from "../../../assets/Snake.gif"
 import ListingLoader from '../../../components/ListingLoader';
 import noDatafound from "../../../assets/no-data.png"
+import SelectedDropDown from '../../../components/SelectionDropDown';
 
 const SubAdminList = () => {
     const fetchsubadminList = useRef(false); //to control api call of subadmins list
@@ -163,7 +164,9 @@ const SubAdminList = () => {
                     <h4 className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">
                     SubAdmin Listing
                     </h4>
-                    <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">
+                    <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem] flex gap-2">
+                    <input type="text" name="" id="" placeholder='Enter Name' className='rounded-md  px-4 py-2 text-black font-semibold text-[16px]'/>
+                    {/* <SelectedDropDown /> */}
                         {
                             storedrole == "admin" && (
                                 <Button
@@ -174,6 +177,12 @@ const SubAdminList = () => {
                                 />
                             )
                         }
+                        <Button
+                        btn_title="Filter"
+                        classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2 h-full w-[100px]"
+                        // onclickFn={() => setIsCreateEditModel(true)}
+                        // onclickFn={handleOpenToSHow}
+                        />
                     </div>
                 </div>
                 {
