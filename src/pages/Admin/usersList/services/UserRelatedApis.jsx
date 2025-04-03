@@ -1,9 +1,9 @@
 import { Service_url, urlEndForUser } from "../../../../../config/app.config";
 
-const getUserList = async({token,current_page,filterByName, filterById}) => {
+const getUserList = async({token,current_page,filterByName, filterById,status}) => {
     // console.log(token,current_page,filterByName, filterById)
     try{
-        const response = await fetch(`${Service_url}${urlEndForUser}get-role-users/?page=${current_page}&id=${filterById}&authorname=${filterByName}`,{
+        const response = await fetch(`${Service_url}${urlEndForUser}get-role-users/?page=${current_page}&id=${filterById}&authorname=${filterByName}&status=${status}`,{
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',

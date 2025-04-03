@@ -127,7 +127,7 @@ const UserDetailed = () => {
     }
   return (
     <>
-        <div className="card w-full h-full flex justify-center items-center">
+        <div className="card w-full h-full flex justify-center items-center max-[721px]:px-[20px]">
             <div className="card-body bg-[#27293d] w-[700px] py-10 rounded-md relative">
                 <div className="outer-img-div absolute bg-[#27293D] left-2/4 translate-x-[-50px] top-[-60px] rounded-[50%]">
                     <img src={undrawpicprofile} className="w-[100px] h-[100px]" alt="" />
@@ -141,39 +141,39 @@ const UserDetailed = () => {
                     </p>
                     {
                         storedrole != "User" && (
-                            <div className="flex py-1.5 gap-2">
+                            <div className="flex py-1.5 gap-2 max-[613px]:grid max-[613px]:grid-cols-2 max-[613px]:gap-[30px]">
                             <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
                                 <span className="text-white text-2xl lg:text-2.5xl leading-none font-semibold">
                                 {storedApiResult.totalAdminsCount}
                                 </span>
                                 <span className="text-white text-sm">Employees</span>
                             </div>
-                            <span className="[&amp;:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
+                            <span className="[&amp;:not(:last-child)]:border-e border-e-gray-300 my-1 max-[613px]:hidden"></span>
                             <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
                                 <span className="text-white text-2xl lg:text-2.5xl leading-none font-semibold">
                                 {storedApiResult.totalUsersCount}
                                 </span>
                                 <span className="text-white text-sm">Users</span>
                             </div>
-                            <span className="[&amp;:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
+                            <span className="[&amp;:not(:last-child)]:border-e border-e-gray-300 my-1 max-[613px]:hidden"></span>
                             <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
                                 <span className="text-white text-2xl lg:text-2.5xl leading-none font-semibold">
                                 {storedApiResult.assignedUserCount}
                                 </span>
                                 <span className="text-white text-sm">Assigned User</span>
                             </div>
-                            <span className="[&amp;:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
+                            <span className="[&amp;:not(:last-child)]:border-e border-e-gray-300 my-1 max-[613px]:hidden"></span>
                             <div className="grid grid-cols-1 place-content-center flex-1 gap-1 text-center">
                                 <span className="text-white text-2xl lg:text-2.5xl leading-none font-semibold">
                                 {storedApiResult.totalInactiveUsersCount}
                                 </span>
                                 <span className="text-white text-sm">Inactive User</span>
                             </div>
-                            <span className="[&amp;:not(:last-child)]:border-e border-e-gray-300 my-1"></span>
+                            <span className="[&amp;:not(:last-child)]:border-e border-e-gray-300 my-1 max-[613px]:hidden"></span>
                             </div>
                         )
                     }
-                <div className="px-[46px] pt-[5px] text-white grid grid-cols-2 gap-[10px]">
+                <div className="px-[46px] pt-[5px] text-white grid grid-cols-2 gap-[10px] max-[480px]:grid-cols-1">
                     <div className="info">
                         <div className="title-head p-[5px]">First Name</div>
                         <p className="bg-[#17171e] p-[5px]">{storedApiResult?.uerDetailById?.firstname}</p>

@@ -1,8 +1,8 @@
 import { Service_url, urlEnd } from "../../../../../config/app.config";
 
-const getSubAdminsList = async({token,current_page}) => {
+const getSubAdminsList = async({token,current_page,filterByName,hasAllRights}) => {
     try{
-        const response = await fetch(`${Service_url}${urlEnd}admin-users?page=${current_page}`,{
+        const response = await fetch(`${Service_url}${urlEnd}admin-users?page=${current_page}&firstname=${filterByName}&hasAllRights=${hasAllRights}`,{
             method: "GET",
             headers: {
                 'ngrok-skip-browser-warning': 'true',

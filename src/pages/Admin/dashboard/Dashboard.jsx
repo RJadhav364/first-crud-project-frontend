@@ -60,7 +60,7 @@ const Dashboard = () => {
       <div className='w-full h-full text-white'>
         <div className='mx-[20px] py-[20px]'>
           <h1 className='text-xl'>Welcome, {storedfirstname}</h1>
-          <div className='grid grid-cols-4 gap-[60px] mt-[10px]'>
+          <div className='2xl:grid 2xl:grid-cols-4 xl:grid xl:grid-cols-4 lg:grid lg:grid-cols-3 md:grid md:grid-cols-2 gap-[10px] mt-[10px]'>
             <div className='p-4'>
               <DashboardCountBox gradient_color="bg-background-image" totalCount={subAdminRecordsCount.subAdminCount} boxHeading="SubAdmin Count" imgSource={adminImage} loadingState={isLoading} />
             </div>
@@ -75,8 +75,8 @@ const Dashboard = () => {
             </div>
           </div>
           <div className="card bg-[#27293d] my-[30px] mx-[17px]">
-            <div className="card-body p-[15px] rounded-[10px]">
-              <div className={`table-responsive ps w-full block ${subAdminRecordsCount.userData == null ? "h-[400px]" : ""}`}>
+            <div className="card-body p-[15px] rounded-[10px] max-[820px]:overflow-scroll">
+              <div className={`table-responsive ps w-full block max-[820px]:w-[800px] ${subAdminRecordsCount.userData == null ? "h-[400px]" : ""}`}>
                 {isLoading ? (<ListingLoader outerDivClass="w-full h-full flex justify-center items-center py-[50px]" insidedivClass="w-[100px] h-[100px]" />) : 
                 // (
                   <>

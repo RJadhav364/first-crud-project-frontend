@@ -12,6 +12,7 @@ import Snake from "../../../assets/Snake.gif"
 import ListingLoader from '../../../components/ListingLoader';
 import noDatafound from "../../../assets/no-data.png"
 import SelectedDropDown from '../../../components/SelectionDropDown';
+import ActivityDropDown from '../../../components/ActivityDropDown';
 
 const SubAdminList = () => {
     const fetchsubadminList = useRef(false); //to control api call of subadmins list
@@ -28,9 +29,13 @@ const SubAdminList = () => {
     const showConfirmButton = useRef(false);
     const showCancelButton = useRef(false);
     const {token,storedrole} = useAuthStore();
+    const FilterValues = useRef({
+        firstname: "",
+        hasAllRights: "",
+      })
     const allSubAdminList = async(pageNumber) => {
         setIsLoadingSubadminList(true);
-        const result = await getSubAdminsList({token,current_page:pageNumber});
+        const result = await getSubAdminsList({token,current_page:pageNumber,filterByName :FilterValues.current.firstname.value,hasAllRights: FilterValues.current.hasAllRights});
         const data = await result.json();
         // console.log(data);
         switch(true){
@@ -156,22 +161,40 @@ const SubAdminList = () => {
         // isCreateEditModel.current = true;
         allSubAdminList(gotNumber); 
     }
+    const handleApplyFilter = () => {
+        // console.log(FilterValues.current.firstname.value,FilterValues.current.id)
+        allSubAdminList(1)
+    }
+    const dropdownData = [
+        {
+          id: "Full_Access",
+          value: "Full Access"
+        },
+        {
+          id: "Limited_Access",
+          value: "Limited Access"
+        }
+    ];
+    const handleSelectStatus = (value) => {
+        FilterValues.current.hasAllRights = value == "Full Access" ? "Yes" : value == "Limited Access" ? "No" : "";
+    }
   return (
     <>
         <div className="w-full h-full text-white">
             <div className="card bg-[#27293d] m-[30px]">
-                <div className="card-header pt-[15px] px-[15px] flex justify-between">
+                <div className="card-header pt-[15px] px-[15px] flex justify-between min-[1071px]:flex-row sm:flex-col max-[1071px]:items-center max-[640px]:flex-col">
                     <h4 className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">
                     SubAdmin Listing
                     </h4>
-                    <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem] flex gap-2">
-                    <input type="text" name="" id="" placeholder='Enter Name' className='rounded-md  px-4 py-2 text-black font-semibold text-[16px]'/>
+                    <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem] flex gap-2 max-[974px]:grid max-[974px]:grid-cols-3 max-[974px]:w-full max-[974px]:grid-cols-2 max-[530px]:grid-cols-1">
+                    <input type="text" name="" ref={(e)=>{FilterValues.current.firstname = e}} id="" placeholder='Enter Name' className='rounded-md  px-4 py-2 text-black font-semibold text-[16px]'/>
+                    <ActivityDropDown dropdownPlaceholder="Permission Filter" dataToMap={dropdownData} onDropDownValueChange={handleSelectStatus} />
                     {/* <SelectedDropDown /> */}
                         {
                             storedrole == "admin" && (
                                 <Button
                                     btn_title="Add New User"
-                                    classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2"
+                                    classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2 max-[974px]:w-full"
                                     onclickFn={() => setIsCreateEditModel(true)}
                                     // onclickFn={handleOpenToSHow}
                                 />
@@ -179,9 +202,9 @@ const SubAdminList = () => {
                         }
                         <Button
                         btn_title="Filter"
-                        classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2 h-full w-[100px]"
+                        classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2 h-full w-[100px] max-[974px]:w-full"
                         // onclickFn={() => setIsCreateEditModel(true)}
-                        // onclickFn={handleOpenToSHow}
+                        onclickFn={handleApplyFilter}
                         />
                     </div>
                 </div>
@@ -203,8 +226,8 @@ const SubAdminList = () => {
                                     </div>
                                 </div>
                                 ) : (
-                                    <div className="card-body p-[15px]">
-                                        <div className="table-responsive ps w-full block">
+                                    <div className="card-body p-[15px] max-[820px]:overflow-scroll">
+                                        <div className="table-responsive ps w-full block max-[820px]:w-[800px]">
                                         <table className="tablesorter table w-full">
                                             <thead className="text-primary">
                                             <tr>

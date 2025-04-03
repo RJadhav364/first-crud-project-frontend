@@ -79,9 +79,9 @@ export default function SelectedDropDown({arrayData, onStateChange}) {
     setIsOpen(!isOpen)
   }
   return (
-    <div value={selected} onChange={setSelected}>
+    <div >
       <div className="relative h-full">
-        <button onClick={toggleMenu} className="grid w-[200px] h-full grid-flow-col items-center justify-between cursor-pointer rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+        <button onClick={toggleMenu} className="grid w-[200px] h-full grid-flow-col items-center justify-between cursor-pointer rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6 max-[974px]:w-full">
           <span className="col-start-1 row-start-1 flex items-center gap-3 pr-6">
             {/* <img alt="" src={selected.avatar} className="size-5 shrink-0 rounded-full" /> */}
             <span className={`block truncate font-semibold ${selected.firstname == "" ? "text-[#7f888d]" : "text-gray-900"} text-[16px]`}>{selected.firstname == "" ? "Select Assigned To" : selected.firstname}</span>
@@ -90,11 +90,11 @@ export default function SelectedDropDown({arrayData, onStateChange}) {
             aria-hidden="true"
             className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
           /> */}
-          <svg onClick={(e) => {setSelected({firstname: "",id:""}), e.stopPropagation()}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" className="om w-[15px] h-[15px]"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path></svg>
+          <svg onClick={(e) => {setSelected({firstname: "",id:""}),onStateChange({firstname: "",id:""}), e.stopPropagation()}} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon" className="om w-[15px] h-[15px]"><path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z"></path></svg>
         </button>
 
         <div
-          className={`absolute origin-top z-10 mt-1 max-h-56 w-[200px] overflow-auto rounded-md bg-white py-1 text-base ring-1 shadow-lg ring-black/5 focus:outline-hidden transition data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm ${isOpen ? "translate-y-[5px] scale-y-100" : "translate-y-0 scale-y-0"}`}
+          className={`absolute origin-top z-10 mt-1 max-h-56 w-[200px] max-[974px]:w-full overflow-auto rounded-md bg-white py-1 text-base ring-1 shadow-lg ring-black/5 focus:outline-hidden transition data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm ${isOpen ? "translate-y-[5px] scale-y-100" : "translate-y-0 scale-y-0"}`}
         >
           {arrayData?.map(({firstname,_id}) => (
             <div
@@ -102,7 +102,7 @@ export default function SelectedDropDown({arrayData, onStateChange}) {
             //   value={authorizedDetails.}
               className="group relative cursor-pointer py-2 pr-2 pl-3 text-gray-900 select-none hover:bg-indigo-600 hover:text-white hover:outline-hidden"
             >
-              <div className="flex items-center" onClick={() => {setSelected({firstname: firstname,id:_id}), onStateChange({id:_id})}}>
+              <div className="flex items-center" onClick={() => {setSelected({firstname: firstname,id:_id}), onStateChange({id:_id}), setIsOpen(false)}}>
                 {/* <img alt="" src={person.avatar} className="size-5 shrink-0 rounded-full" /> */}
                 <span className="ml-3 block font-normal group-hover:font-semibold">{firstname}</span>
               </div>

@@ -11,6 +11,7 @@ import Pagination from '../../../components/Pagination';
 import ListingLoader from '../../../components/ListingLoader';
 import noDatafound from "../../../assets/no-data.png"
 import SelectedDropDown from '../../../components/SelectionDropDown';
+import ActivityDropDown from '../../../components/ActivityDropDown';
 
 const UserListing = () => {
   const [userData , setUserData] = useState([]);
@@ -29,12 +30,13 @@ const UserListing = () => {
   })
   const FilterValues = useRef({
     firstname: "",
-    id: ""
+    id: "",
+    status: ""
   })
   // all user list
   const allUserListFn = async(pageNumber) => {
     setIsLoadingSubadminList(true);
-    const result = await getUserList({token,current_page:pageNumber,filterByName :FilterValues.current.firstname.value, filterById: FilterValues.current.id});
+    const result = await getUserList({token,current_page:pageNumber,filterByName :FilterValues.current.firstname.value, filterById: FilterValues.current.id, status: FilterValues.current.status});
     const data = await result.json();
     // console.log(await result.json());
     switch(true){
@@ -50,7 +52,7 @@ const UserListing = () => {
   }
   // subadmin list call define
   const authorizedPersonData = async() => {
-    const result = await getSubAdminsList({token,current_page:"no_pagination"});
+    const result = await getSubAdminsList({token,current_page:"no_pagination",filterByName :"",hasAllRights: ""});
     const data = await result.json();
     // console.log(await result.json());
     switch(true){
@@ -110,28 +112,42 @@ const UserListing = () => {
     // console.log('filter applied',firstname,id)
     FilterValues.current.id = id;
   }
+  const handleSelectStatus = (value) => {
+    FilterValues.current.status = value;
+  }
   const handleApplyFilter = () => {
     // console.log(FilterValues.current.firstname.value,FilterValues.current.id)
     allUserListFn(1)
   }
+  const dropdownData = [
+    {
+      id: "active",
+      value: "Active"
+    },
+    {
+      id: "inactive",
+      value: "Inactive"
+    }
+  ]
   return (
     <>
       <div className="w-full h-full text-white">
         <div className="card bg-[#27293d] m-[30px]">
-          <div className="card-header pt-[15px] px-[15px] flex justify-between">
+          <div className="card-header pt-[15px] px-[15px] flex justify-between min-[1071px]:flex-row sm:flex-col max-[1071px]:items-center max-[640px]:flex-col">
             <h4 className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem]">User Listing</h4>
-            <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem] flex gap-2">
+            <div className="card-title mb-[.75rem] text-white font-[100] leading-[1.45em] text-[1.0625rem] flex gap-2 max-[974px]:grid max-[974px]:grid-cols-3 max-[974px]:w-full max-[974px]:grid-cols-2 max-[530px]:grid-cols-1">
               <input type="text" ref={(e)=>{FilterValues.current.firstname = e}} name="firstname" id="firstname" placeholder='Enter Name' className='rounded-md  px-4 py-2 text-black font-semibold text-[16px]'/>
               {
                 storedrole == "admin" && (
                   <SelectedDropDown arrayData={storeAuthorizedData?.current} onStateChange={handleSelectSubadmin} />
                 )
               }
+              <ActivityDropDown dropdownPlaceholder="Select Status" dataToMap={dropdownData} onDropDownValueChange={handleSelectStatus} />
               {
                 storedrole != "User" && (
                   <Button
                       btn_title="Add New User"
-                      classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2"
+                      classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2 max-[974px]:w-full"
                       onclickFn={() => setIsCreateUserModel(true)}
                       // onclickFn={handleOpenToSHow}
                   />
@@ -139,7 +155,7 @@ const UserListing = () => {
               }
               <Button
                 btn_title="Filter"
-                classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2 h-full w-[100px]"
+                classes="font-semibold hover:bg-black hover:text-white hover:ring hover:ring-white transition duration-300 inline-flex items-center justify-center rounded-md text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white text-black h-10 px-4 py-2 h-full w-[100px] max-[974px]:w-full"
                 // onclickFn={() => setIsCreateEditModel(true)}
                 onclickFn={handleApplyFilter}
               />
@@ -162,8 +178,8 @@ const UserListing = () => {
                                     </div>
                                 </div>
                 ) : (
-              <div className="card-body p-[15px]">
-                  <div className="table-responsive ps w-full block">
+              <div className="card-body p-[15px] max-[820px]:overflow-scroll">
+                  <div className="table-responsive ps w-full block max-[820px]:w-[800px]">
                     <table className="tablesorter table w-full">
                       <thead className="text-primary">
                         <tr>
