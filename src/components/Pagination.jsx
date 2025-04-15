@@ -1,12 +1,13 @@
 import React from 'react'
 import Button from './Button'
 
-const Pagination = ({fetchDataDetail,passedListingFunction}) => {
+const Pagination = ({fetchDataDetail,passedListingFunction,onPageChange}) => {
     // console.log(fetchDataDetail)
     // const {token} = useAuthStore();
     const handlePageChange = (gotNumber) => {
         // console.log(gotNumber)
         // isCreateEditModel.current = true;
+        onPageChange(gotNumber)
         passedListingFunction(gotNumber); 
     }
   return (

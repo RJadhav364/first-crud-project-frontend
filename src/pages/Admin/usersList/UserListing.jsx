@@ -32,7 +32,8 @@ const UserListing = () => {
     firstname: "",
     id: "",
     status: ""
-  })
+  });
+  const storedPageNo = useRef(1);
   // all user list
   const allUserListFn = async(pageNumber) => {
     setIsLoadingSubadminList(true);
@@ -129,6 +130,11 @@ const UserListing = () => {
       value: "Inactive"
     }
   ]
+  const handlePageChange = (gotNumber) => {
+    // alert(gotNumber)
+    storedPageNo.current = gotNumber;
+    // allSubAdminList(gotNumber); 
+}
   return (
     <>
       <div className="w-full h-full text-white">
@@ -278,6 +284,7 @@ const UserListing = () => {
                                                       <Pagination 
                                                         fetchDataDetail={userData}
                                                         passedListingFunction={allUserListFn}
+                                                        onPageChange={handlePageChange}
                                                       />
                                                       </>
             )

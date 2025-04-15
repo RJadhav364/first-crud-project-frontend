@@ -33,6 +33,7 @@ const SubAdminList = () => {
         firstname: "",
         hasAllRights: "",
       })
+    const storedPageNo = useRef(1);
     const allSubAdminList = async(pageNumber) => {
         setIsLoadingSubadminList(true);
         const result = await getSubAdminsList({token,current_page:pageNumber,filterByName :FilterValues.current.firstname.value,hasAllRights: FilterValues.current.hasAllRights});
@@ -61,7 +62,7 @@ const SubAdminList = () => {
                 switch(true){
                     case modifyAuthorizedPerson.status == 200:
                         setIsConfirmationModelOpen(false);
-                        allSubAdminList(1);
+                        allSubAdminList(storedPageNo.current);
                         break;
                     case modifyAuthorizedPerson.status == 409:
                         modalBody.current = "Email ID Already exist";
@@ -75,7 +76,7 @@ const SubAdminList = () => {
                 switch(true){
                     case deletedApiCall.status == 200:
                         setIsConfirmationModelOpen(false);
-                        allSubAdminList(1);
+                        allSubAdminList(storedPageNo.current);
                         toast.success("Deleted Successfully👍!",{
                             theme: "dark",
                             position: "top-center"
@@ -92,7 +93,7 @@ const SubAdminList = () => {
                 switch(true){
                     case modifyAuthorizedPerson.status == 200:
                         setIsConfirmationModelOpen(false);
-                        allSubAdminList(1);
+                        allSubAdminList(storedPageNo.current);
                         break;
                     case modifyAuthorizedPerson.status == 409:
                         modalBody.current = "Email ID Already exist";
@@ -158,8 +159,8 @@ const SubAdminList = () => {
     // }
     const handlePageChange = (gotNumber) => {
         // alert(gotNumber)
-        // isCreateEditModel.current = true;
-        allSubAdminList(gotNumber); 
+        storedPageNo.current = gotNumber;
+        // allSubAdminList(gotNumber); 
     }
     const handleApplyFilter = () => {
         // console.log(FilterValues.current.firstname.value,FilterValues.current.id)
@@ -435,6 +436,7 @@ const SubAdminList = () => {
                 <Pagination 
                     fetchDataDetail={subAdminsData}
                     passedListingFunction={allSubAdminList}
+                    onPageChange={handlePageChange}
                 />
             </div>
         </div>
