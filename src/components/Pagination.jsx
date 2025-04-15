@@ -51,7 +51,7 @@ const Pagination = ({fetchDataDetail,passedListingFunction}) => {
                             key={pageNumber}
                             onclickFn={() => handlePageChange(pageNumber)}
                             btn_title={pageNumber}
-                            classes="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 h-full"
+                            classes={`relative z-10 inline-flex items-center rounded-md ${fetchDataDetail?.current_page == pageNumber ? "bg-indigo-600  text-white" : "text-black ring-1 ring-inset ring-gray-300"} px-4 py-2 text-sm font-semibold focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 h-full`}
                             />
                     ))}
                     <Button classes={`relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0 ${fetchDataDetail?.total_page == fetchDataDetail?.current_page ? "cursor-not-allowed" : ""}`} btn_title="Next" onclickFn={() => {handlePageChange(fetchDataDetail?.current_page + 1)}} disbaledLogic={fetchDataDetail?.total_page == fetchDataDetail?.current_page} />

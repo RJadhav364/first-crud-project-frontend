@@ -150,7 +150,7 @@ const CreateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                                         {
                                             storedrole == "subadmin" ? (
                                                 <select name="handledSubAdmin" id="handledSubAdmin" className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground mt-[7px]" ref={(e)=>{createPersonData.current.handledSubAdmin = e}}>
-                                                    <option selected disabled value={storeduser_id}>{storedfirstname}</option>
+                                                    <option selected value={storeduser_id}>{storedfirstname}</option>
                                                 </select>
                                             ) : (
                                                 <select name="handledSubAdmin" id="handledSubAdmin" className="text-white block w-full border-0 bg-transparent p-0 text-sm file:my-1 file:rounded-full file:border-0 file:bg-accent file:px-4 file:py-2 file:font-medium placeholder:text-muted-foreground/90 focus:outline-none focus:ring-0 sm:leading-7 text-foreground mt-[7px]" ref={(e)=>{createPersonData.current.handledSubAdmin = e}}>
