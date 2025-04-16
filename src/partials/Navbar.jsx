@@ -33,6 +33,7 @@ export default function Example() {
     setIsOpen({profileDropDown: !isOpen.profileDropDown})
   }
   const handleLogoutClicked = () => {
+    setIsOpen({profileDropDown: false})
     setIsConfirmationModelOpen(true);
     modalDetails.current.modalBody = "Are you sure you want to logged out???";
      modalDetails.current.showConfirmButton =  true;
@@ -126,24 +127,6 @@ export default function Example() {
                         className={`absolute right-0 z-10 mt-2 w-[135px] origin-top-right divide-y divide-gray-100 rounded-md bg-[#212130] ring-1 shadow-lg ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in ${isOpen.profileDropDown ? "translate-y-[5px] scale-y-100" : "translate-y-0 scale-y-0"}`}
                       >
                         <div className="py-1">
-                          <div>
-                            <Link
-                              to={`user-edit/${storeduser_id}`}
-                              className="flex gap-[.5rem] px-4 py-2 text-sm text-[#b3b3b3] data-focus:bg-gray-100 data-focus:text-gray-900 data-focus:outline-hidden hover:bg-[#17171E] hover:text-[#6a73fa]"
-                            >
-                              <svg
-                                xmlns="http:www.w3.org/2000/svg"
-                                viewBox="0 0 24 24"
-                                fill="white"
-                                aria-hidden="true"
-                                className="hover:text-[#5c5ccc]"
-                                width="18" height="18"
-                              >
-                                <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z"></path>
-                              </svg>
-                              Edit
-                            </Link>
-                          </div>
                           <div>
                             <Link
                               to={`user-profile/${storeduser_id}`}

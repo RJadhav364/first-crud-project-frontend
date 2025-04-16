@@ -250,7 +250,7 @@ const UserDetailed = () => {
                     </div>
                     <div className="btns grid grid-cols-2 mt-[25px] gap-[30px]">
                         <button className="bg-[#39838A] p-[12px] rounded-[5px] text-white" onClick={handleSubmitData}>Submit</button>
-                        <button className="bg-[#84634F] p-[12px] rounded-[5px] text-white">Cancel</button>
+                        <button className="bg-[#84634F] p-[12px] rounded-[5px] text-white" onClick={()=> setIsEditModelOpen(false)}>Cancel</button>
                     </div>
                 </div>
             </div>
