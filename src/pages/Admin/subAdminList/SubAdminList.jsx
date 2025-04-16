@@ -469,6 +469,7 @@ const SubAdminList = () => {
             token={token}
             handleRecallListing={allSubAdminList}
             userEditData={adminfetchData.current}
+            currentPage={storedPageNo.current}
         />
     </>
   )

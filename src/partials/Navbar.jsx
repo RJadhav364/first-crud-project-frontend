@@ -5,9 +5,9 @@ import { useRef, useState } from "react"
 import ConfirmationBox from "../components/ConfirmationBox"
 
 const navigation = [
-  { name: 'Dashboard', href: '/admin/dashboard', current: false },
-  { name: 'SubAdmin List', href: '/admin/sub-admin', current: false },
-  { name: 'Users List', href: '/admin/users', current: false },
+  { name: 'Dashboard', href: '/admin/dashboard', current: false, shortform: "dashboard" },
+  { name: 'SubAdmin List', href: '/admin/sub-admin', current: false , shortform: "sub-admin"},
+  { name: 'Users List', href: '/admin/users', current: false , shortform: "users"},
   // { name: 'Calendar', href: '#', current: false },
 ]
 
@@ -85,7 +85,7 @@ export default function Example() {
                       to={item.href}
                       aria-current={item.current ? 'page' : undefined}
                       className={classNames(
-                        item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                        item.shortform == window.location.href.split("/")[4] ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                         'rounded-md px-3 py-2 text-sm font-medium',
                       )}
                     >
@@ -181,7 +181,7 @@ export default function Example() {
                 to={item.href}
                 aria-current={item.current ? 'page' : undefined}
                 className={classNames(
-                  item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                  item.shortform == window.location.href.split("/")[4] ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                   'block rounded-md px-3 py-2 text-base font-medium',
                 )}
               >

@@ -309,6 +309,7 @@ const UserListing = () => {
         fetchSingleUserData={storePartcularUserData.current}
         onClosed={() => setIsUpdateUserModel(false)}
         passedListingFunction={allUserListFn}
+        currentPage={storedPageNo.current}
       />
       <ConfirmationBox
         isOpen={isConfirmationModelOpen}

@@ -6,7 +6,7 @@ import { emailregx } from '../validation/InputValidation'
 import { updateUser } from '../pages/Admin/usersList/services/UserRelatedApis'
 import { toast } from 'react-toastify'
 
-const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList,fetchSingleUserData,passedListingFunction}) => {
+const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList,fetchSingleUserData,passedListingFunction,currentPage}) => {
     // console.log("isUserModelOpen",isUserModelOpen)
     const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
     const modalBody = useRef("");
@@ -68,7 +68,7 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
         setIsConfirmationModelOpen(false);
         const getUpdatedUserResult = await updateUser({body: storeEditedValues.current, token: token,id:fetchSingleUserData.data.id,hasAllRights: fetchSingleUserData.data.adminDetails.hasAllRights});
         // fetchSingleUserData.data.adminDetails.hasAllRights
-        console.log(getUpdatedUserResult)
+        // console.log(getUpdatedUserResult)
         if(getUpdatedUserResult.status == 200){
             toast.success("User Updated👍!",{
                 theme: "dark",
@@ -76,7 +76,7 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
             })
             setIsConfirmationModelOpen(false);
             onClosed();
-            passedListingFunction();
+            passedListingFunction(currentPage);
         } else if(getUpdatedUserResult.status == 409){
             modalBody.current = "Email ID Already exist";
             setIsConfirmationModelOpen(true);

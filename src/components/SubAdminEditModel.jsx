@@ -4,7 +4,7 @@ import { createNewAuthorizedPerson, getSingleSubadmin, updateAuthorizedPerson } 
 import ConfirmationBox from './ConfirmationBox';
 import { toast } from 'react-toastify';
 
-const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallListing,userEditData}) => {
+const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallListing,userEditData,currentPage}) => {
     // console.log(userEditData)
     const createPersonData = useRef({
         firstname: "",
@@ -76,7 +76,7 @@ const SubAdminEditModel = ({toOpenModel,modelTitle,onClosed,token,handleRecallLi
                 })
                 
                 onClosed();
-                handleRecallListing();
+                handleRecallListing(currentPage);
                 break;
             case modifyAuthorizedPerson.status == 409:
                 modalBody.current = "Email ID Already exist";
