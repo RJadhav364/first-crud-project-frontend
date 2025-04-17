@@ -37,9 +37,9 @@ const createNewUser = async({body,token}) => {
 }
 
 // handle partcular user fetch data
-const getPartcularUser = async({id,token}) => {
+const getPartcularUser = async({id,token,rights}) => {
     try{
-        const response = await fetch(`${Service_url}${urlEndForUser}get-role-users/${id}`,{
+        const response = await fetch(`${Service_url}${urlEndForUser}get-role-users/${id}?rights=${rights}`,{
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',

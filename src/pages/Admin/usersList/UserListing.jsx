@@ -17,7 +17,7 @@ const UserListing = () => {
   const [userData , setUserData] = useState([]);
   const [isCreateUserModel,setIsCreateUserModel] = useState(false); // to open create user model
   const [isUpdateUserModel,setIsUpdateUserModel] = useState(false); // to open update user model
-  const {token,hasAllRights,storedrole} = useAuthStore();
+  const {token,hasAllRights,storedrole,storeduser_id} = useAuthStore();
   const storeAuthorizedData = useRef([]); //store admin and subadmin data
   const [isReloginModelOpen , setIsReloginModelOpen] = useState(false);
   const storePartcularUserData = useRef({})
@@ -67,11 +67,32 @@ const UserListing = () => {
   const handlePerformAction = async(id, actionToPerform) => {
     switch(true){
       case actionToPerform == "EditAction":
-        const callUserById = await getPartcularUser({id:id, token: token});
+        const callUserById = await getPartcularUser({id:id, token: token,rights: storeduser_id});
         const data = await callUserById.json();
         // console.log(data);
-        storePartcularUserData.current = data;
-        setIsUpdateUserModel(true);
+        switch(true){
+          case callUserById.status == 200:
+            storePartcularUserData.current = data;
+            setIsUpdateUserModel(true);
+            break;
+          case callUserById.status == 401:
+            modalBody.current = "Dont have rights to perform this action";
+            modelButtons.current.showConfirmationBtn = false;
+            modelButtons.current.showCancelBtn = true;
+            setIsConfirmationModelOpen(true);
+            break;
+          case callUserById.status == 403:
+            modalBody.current = "User cannot see details";
+            modelButtons.current.showConfirmationBtn = false;
+            modelButtons.current.showCancelBtn = true;
+            setIsConfirmationModelOpen(true);
+            break;
+          default:
+            modalBody.current = "Something went wrong";
+            modelButtons.current.showConfirmationBtn = false;
+            modelButtons.current.showCancelBtn = true;
+            setIsConfirmationModelOpen(true);
+        }
         break;
       case actionToPerform == "DeleteAction":
         modalBody.current = "Are you sure you want to delete this User";
