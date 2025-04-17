@@ -36,7 +36,7 @@ const UserDetailed = () => {
     const [isConfirmationModelOpen , setIsConfirmationModelOpen] = useState(false);
     const [isReloginModelOpen , setIsReloginModelOpen] = useState(false);
     const getProvidedIdDetails = async() => {
-        const detailsResponse = await getUserInfo({token,id});
+        const detailsResponse = await getUserInfo({token,id,storedrole});
         const data = await detailsResponse.json();
         switch(true){
             case detailsResponse.status == 401:
@@ -192,7 +192,7 @@ const UserDetailed = () => {
                     </div>
                     <div className="info">
                         <div className="title-head p-[5px]">Number</div>
-                        <p className="bg-[#17171e] p-[5px]">{storedApiResult?.uerDetailById?.mnumber}</p>
+                        <p className="bg-[#17171e] p-[5px]">{storedApiResult?.uerDetailById?.number || storedApiResult?.uerDetailById?.mnumber}</p>
                     </div>
                     <div className="info">
                         <div className="title-head p-[5px]">Role</div>
@@ -207,7 +207,7 @@ const UserDetailed = () => {
                             </div>
                             <div className="info">
                                 <div className="title-head p-[5px]">Authorizer Name</div>
-                                <p className="bg-[#17171e] p-[5px]">{storedApiResult?.uerDetailById?.AuthorizerName}</p>
+                                <p className="bg-[#17171e] p-[5px]">{storedApiResult?.uerDetailById?.handledSubAdmin?.firstname}</p>
                             </div>
                             </>
                         )
@@ -245,7 +245,13 @@ const UserDetailed = () => {
                     </div>
                     <div className="dash-input-wrapper mb-30">
                         <label htmlFor="" className="block text-[20px] text-[#f0fff9] mb-[10px]">Number*</label>
-                        <input type="text" defaultValue={storedApiResult?.uerDetailById?.mnumber} ref={(e)=>{editFieldData.current.mnumber = e}} className="w-full h-[55px] tracking-[-0.16px] rounded-[7px] px-[20px] border-[#e5e5e5]" placeholder="Number" />
+                        {
+                            storedrole == "User" ? (
+                                <input type="text" defaultValue={storedApiResult?.uerDetailById?.number} ref={(e)=>{editFieldData.current.number = e}} className="w-full h-[55px] tracking-[-0.16px] rounded-[7px] px-[20px] border-[#e5e5e5]" placeholder="Number" />
+                            ) : (
+                                <input type="text" defaultValue={storedApiResult?.uerDetailById?.mnumber} ref={(e)=>{editFieldData.current.mnumber = e}} className="w-full h-[55px] tracking-[-0.16px] rounded-[7px] px-[20px] border-[#e5e5e5]" placeholder="Number" />
+                            )
+                        }
                     </div>
                     </div>
                     <div className="btns grid grid-cols-2 mt-[25px] gap-[30px]">

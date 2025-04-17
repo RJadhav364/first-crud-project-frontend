@@ -51,8 +51,8 @@ const UpdateUserModel = ({isUserModelOpen,modelTitle,onClosed,passAuthorizedList
                         setIsConfirmationModelOpen(true);
                         modalBody.current = "Not made any changes";
                         userEdit.current  = "notMadeAnyChanges"
-                        showConfirmButton.current = true;
-                        showCancelButton.current = false;
+                        showConfirmButton.current = false;
+                        showCancelButton.current = true;
                         break;
                     default:
                         setIsConfirmationModelOpen(true);

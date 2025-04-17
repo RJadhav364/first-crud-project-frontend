@@ -1,9 +1,9 @@
 import { Service_url , urlEnd} from "../../../../../config/app.config";
 
-const getUserInfo = async({token,id}) => {
+const getUserInfo = async({token,id,storedrole}) => {
     // console.log(id)
     try{
-        const response = await fetch(`${Service_url}${urlEnd}admin-users/${id}?page=detailed`,{
+        const response = await fetch(`${Service_url}${storedrole == "User" ? "role" : "admin"}/${storedrole == "User" ? "role-users" : "admin-users"}/${id}?page=detailed`,{
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
